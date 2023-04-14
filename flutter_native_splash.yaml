@@ -1,0 +1,8 @@
+dependencies:
+  flutter_native_splash: ^2.2.19
+
+flutter_native_splash:
+  image: "assets/images/logo2.png"
+  color: "#000000"
+  # image-dark: "assets/images/logo2.png"
+  # color-dark: "#000000"
