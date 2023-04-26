@@ -2,7 +2,7 @@ import 'dart:io';
 import 'package:custom_check_box/custom_check_box.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bounceable/flutter_bounceable.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 import 'package:multi_image_picker_view/multi_image_picker_view.dart';
 import 'package:rent/screens/map_screen.dart';
 import 'package:rent/screens/preview_screen.dart';
@@ -23,10 +23,21 @@ class _RentScreenState extends State<RentScreen> {
   final desController = TextEditingController();
   final priceController = TextEditingController();
   final weekController = TextEditingController();
+
   final controller =
       MultiImagePickerController(maxImages: 3, images: <ImageFile>[]);
   String? _selectedItem;
-  final List<String> _catagories = ["Electric", "Clothes", "Cata1", "Cata3"];
+  final List<String> _catagories = [
+    "Electronics",
+    "Home Appliances",
+    "Furniture",
+    "Party and Event",
+    "Tools and Equipment",
+    "Clothing and Accessories",
+    "Toys and Games",
+    "Toys and Games",
+    "Vehicles"
+  ];
   List<File> images = [];
   bool priceError = false;
   bool priceInvalid = false;
@@ -41,6 +52,8 @@ class _RentScreenState extends State<RentScreen> {
   String? location1;
   double? lat;
   double? long;
+
+  String? phoneNumber;
 
   Future<void> _navigateToMapScreen() async {
     final Map<String, dynamic>? result = await Navigator.push(
@@ -60,7 +73,6 @@ class _RentScreenState extends State<RentScreen> {
         lat = latitude;
         long = longitude;
       });
-      // Do something with the latitude, longitude, and location
     }
   }
 
@@ -137,7 +149,8 @@ class _RentScreenState extends State<RentScreen> {
         desController.text.isNotEmpty &&
         weekEndPrice() &&
         images.isNotEmpty &&
-        location1 != null) {
+        location1 != null &&
+        _validatePhoneNumber()) {
       setState(() {
         imgError = false;
         nameError = false;
@@ -146,6 +159,7 @@ class _RentScreenState extends State<RentScreen> {
         desError = false;
         weekendError = false;
         locationError = false;
+        phoneNumberError = false;
       });
 
       Navigator.of(context).push(MaterialPageRoute(
@@ -159,6 +173,7 @@ class _RentScreenState extends State<RentScreen> {
                 lat: lat!,
                 long: long!,
                 location: location1!,
+                phoneNumber: phoneNumber!,
               )));
     } else {
       if (nameController.text.isEmpty) {
@@ -218,6 +233,26 @@ class _RentScreenState extends State<RentScreen> {
         ),
       );
     }
+  }
+
+  final _formKey = GlobalKey<FormState>();
+  bool phoneNumberError = false;
+
+  bool _validatePhoneNumber() {
+    if (_formKey.currentState!.validate()) {
+      // If the form is valid, you can retrieve the phone number from the widget
+      // final PhoneNumber phoneNumber = _phoneNumberController.value;
+      setState(() {
+        phoneNumberError = true;
+      });
+
+      // Do something with the phone number here
+    } else {
+      setState(() {
+        phoneNumberError = false;
+      });
+    }
+    return phoneNumberError;
   }
 
   @override
@@ -288,28 +323,48 @@ class _RentScreenState extends State<RentScreen> {
                 ),
               ),
             ),
-            // SliverToBoxAdapter(
-            //   child: Padding(
-            //     padding: const EdgeInsets.only(top: 18.0, left: 8, right: 8),
-            //     child: Container(
-            //       padding: const EdgeInsets.only(left: 10),
-            //       height: 50,
-            //       decoration: BoxDecoration(
-            //           borderRadius: BorderRadius.circular(5),
-            //           color: Theme.of(context).cardColor),
-            //       child: const TextField(
-            //         keyboardType: TextInputType.phone,
-            //         decoration: InputDecoration(
-            //             border: InputBorder.none,
-            //             hintText: "Enter your contact number"),
-            //       ),
-            //     ),
-            //   ),
-            // ),
             SliverToBoxAdapter(child: prices(context)),
             SliverToBoxAdapter(
               child:
                   ImageSelector(controller: controller, imageError: imgError),
+            ),
+            SliverToBoxAdapter(
+              child: Padding(
+                padding: const EdgeInsets.only(top: 18.0, left: 8, right: 8),
+                child: Form(
+                  key: _formKey,
+                  child: Column(
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.only(left: 10),
+                        height: 75,
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(5),
+                            color: Theme.of(context).cardColor),
+                        child: InternationalPhoneNumberInput(
+                          initialValue:
+                              PhoneNumber(isoCode: 'LK', dialCode: '+94'),
+                          onInputChanged: (PhoneNumber number) {
+                            setState(() {
+                              phoneNumber = "${number.phoneNumber}";
+                            });
+                            print(phoneNumber);
+                          },
+                          inputBorder: InputBorder.none,
+                          selectorConfig: const SelectorConfig(
+                            selectorType: PhoneInputSelectorType.BOTTOM_SHEET,
+                          ),
+                          autoValidateMode: AutovalidateMode.disabled,
+                          formatInput: true,
+                          ignoreBlank: false,
+                          keyboardType: const TextInputType.numberWithOptions(
+                              signed: true, decimal: true),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
             ),
             SliverToBoxAdapter(
                 child: DescriptionBox(

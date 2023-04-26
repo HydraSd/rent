@@ -123,7 +123,7 @@ class _SearchScreenState extends State<SearchScreen> {
                             image: NetworkImage("${product['imgUrl'][0]}"))),
                   ),
                   title: Text(product["productName"]),
-                  subtitle: Text(product["catagory"]),
+                  subtitle: Text(product["category"]),
                   trailing: currentLocation != null &&
                           product['lat'] != null &&
                           product['long'] != null
@@ -139,12 +139,13 @@ class _SearchScreenState extends State<SearchScreen> {
                             long: product['long'],
                             imgurls: product["imgUrl"],
                             productName: product["productName"],
-                            catagory: product["catagory"],
+                            catagory: product["category"],
                             description: product["description"],
                             price: product['price'],
                             weekEndPrice: product['weekendPrice'],
                             location: product['location'],
                             userID: product['userId'],
+                            phoneNumber: product['phoneNumber'],
                           ))),
                 );
               });

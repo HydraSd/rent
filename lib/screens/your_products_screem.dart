@@ -59,12 +59,13 @@ class _YourProductsState extends State<YourProducts> {
                               long: product['long'],
                               imgurls: product["imgUrl"],
                               productName: product["productName"],
-                              catagory: product["catagory"],
+                              catagory: product["category"],
                               description: product["description"],
                               price: product['price'],
                               weekEndPrice: product['weekendPrice'],
                               location: product['location'],
                               userID: product['userId'],
+                              phoneNumber: product['phoneNumber'],
                             ))),
                 child: ListTile(
                   leading: Container(
@@ -77,7 +78,7 @@ class _YourProductsState extends State<YourProducts> {
                             image: NetworkImage("${product['imgUrl'][0]}"))),
                   ),
                   title: Text(product['productName']),
-                  subtitle: Text(product['catagory']),
+                  subtitle: Text(product['category']),
                 ),
               );
             },

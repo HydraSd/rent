@@ -1,3 +1,4 @@
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:rent/func/google_sign_in.dart';
@@ -39,6 +40,18 @@ class _MyAppState extends State<MyApp> {
   void initState() {
     super.initState();
     initConnectivity();
+
+    FirebaseMessaging.instance.getInitialMessage().then((message) {
+      if (message != null) {
+        _handleMessage(message);
+      }
+    });
+    FirebaseMessaging.onMessage.listen((message) {
+      _handleMessage(message);
+    });
+    FirebaseMessaging.onMessageOpenedApp.listen((message) {
+      _handleMessage(message);
+    });
   }
 
   Future<void> initConnectivity() async {
@@ -53,6 +66,10 @@ class _MyAppState extends State<MyApp> {
     });
   }
 
+  void _handleMessage(RemoteMessage message) {
+    print("received message: ${message.notification?.title}");
+  }
+
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
@@ -62,7 +79,7 @@ class _MyAppState extends State<MyApp> {
           theme: AppTheme.light(),
           darkTheme: AppTheme.dark(),
           themeMode: ThemeMode.system,
-          home: _isConnected ? const Loged() : const NoInternet()),
+          home: _isConnected ? Loged() : const NoInternet()),
     );
   }
 }

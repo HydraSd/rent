@@ -6,3 +6,6 @@ export 'sidebar.dart';
 export 'description_box.dart';
 export 'product_name.dart';
 export 'image_selecor.dart';
+export 'details_title.dart';
+export 'detail_content.dart';
+export 'image_scroller.dart';

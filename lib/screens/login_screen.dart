@@ -12,6 +12,7 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
+    final brightness = Theme.of(context).brightness;
     return Scaffold(
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -19,10 +20,12 @@ class _LoginScreenState extends State<LoginScreen> {
           Container(
             height: 200,
             width: 200,
-            decoration: const BoxDecoration(
+            decoration: BoxDecoration(
                 image: DecorationImage(
-                    image: AssetImage("assets/images/logo2.png"),
-                    fit: BoxFit.fill)),
+                    image: (brightness == Brightness.light)
+                        ? const AssetImage("assets/images/logo.png")
+                        : const AssetImage("assets/images/logo2.png"),
+                    fit: BoxFit.cover)),
           ),
           const SizedBox(height: 50),
           Row(

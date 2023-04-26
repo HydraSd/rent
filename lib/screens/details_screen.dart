@@ -1,11 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter_bounceable/flutter_bounceable.dart';
 import 'package:rent/screens/screens.dart';
-import 'package:rent/widgets/pirces.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:rent/screens/user_details_screen.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'package:rent/widgets/widget.dart';
 
 class DetailsScreen extends StatefulWidget {
   final List<dynamic> imgurls;
@@ -19,6 +20,7 @@ class DetailsScreen extends StatefulWidget {
   final double long;
   final String userID;
   final String documentId;
+  final String phoneNumber;
   const DetailsScreen(
       {super.key,
       required this.imgurls,
@@ -31,7 +33,8 @@ class DetailsScreen extends StatefulWidget {
       required this.lat,
       required this.long,
       required this.userID,
-      required this.documentId});
+      required this.documentId,
+      required this.phoneNumber});
 
   @override
   State<DetailsScreen> createState() => _DetailsScreenState();
@@ -85,7 +88,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
               backgroundColor: Theme.of(context).cardColor,
               title: const Text("Delete confirmation"),
               content: Text(
-                  "Bu clicking confirm you will delete your product ${widget.productName}"),
+                  "Buy clicking confirm you will delete your product ${widget.productName}"),
               actions: [
                 TextButton(
                     onPressed: () {
@@ -104,6 +107,19 @@ class _DetailsScreenState extends State<DetailsScreen> {
           });
     }
 
+    void makeCalls(String phoneNumber) async {
+      String telUrl = 'tel:0705980290';
+      if (await canLaunchUrl(Uri.parse("tel:$phoneNumber"))) {
+        await launchUrl(Uri.parse("tel:$phoneNumber"));
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Could not launch $phoneNumber'),
+          ),
+        );
+      }
+    }
+
     return Scaffold(
       appBar: AppBar(
         iconTheme: Theme.of(context).iconTheme,
@@ -116,16 +132,24 @@ class _DetailsScreenState extends State<DetailsScreen> {
         title: const Text("Details"),
         toolbarTextStyle: Theme.of(context).textTheme.bodyText2,
         titleTextStyle: Theme.of(context).textTheme.headline6,
+        actions: [
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 18.0),
+            child: GestureDetector(
+                onTap: () => makeCalls(widget.phoneNumber),
+                child: const Icon(Icons.phone)),
+          )
+        ],
       ),
       body: CustomScrollView(
         slivers: [
           SliverToBoxAdapter(
-            child: _ImageScroller(
+            child: ImageScroller(
               imagUrls: widget.imgurls,
             ),
           ),
           SliverToBoxAdapter(
-            child: _Title(
+            child: Title1(
               lat: widget.lat,
               long: widget.long,
               location: widget.location,
@@ -136,11 +160,6 @@ class _DetailsScreenState extends State<DetailsScreen> {
               description: widget.description,
             ),
           ),
-          // SliverToBoxAdapter(
-          //   child: Padding(
-          //     padding: const EdgeInsets.all(16.0),
-          //   ),
-          // ),
           SliverToBoxAdapter(
             child: Center(
                 child: TextButton(
@@ -150,6 +169,11 @@ class _DetailsScreenState extends State<DetailsScreen> {
                   firstDate: DateTime(2000),
                   lastDate: DateTime(3000),
                 );
+                if (dateTimeRange != null) {
+                  final DateTime startDate = dateTimeRange.start;
+                  final DateTime endDate = dateTimeRange.end;
+                  print("$startDate to $endDate");
+                }
               },
               child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -161,7 +185,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
             )),
           ),
           SliverToBoxAdapter(
-            child: _Content(
+            child: Content(
               lat: widget.lat,
               location: widget.location,
               long: widget.long,
@@ -236,7 +260,8 @@ class _DetailsScreenState extends State<DetailsScreen> {
                 : Padding(
                     padding: const EdgeInsets.all(30.0),
                     child: Bounceable(
-                      onTap: () {},
+                      onTap: () => Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => UserDetailsScreen())),
                       child: Material(
                         elevation: 10,
                         borderRadius: BorderRadius.circular(10),
@@ -247,7 +272,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                               color: Colors.blue),
                           child: const Center(
                               child: Text(
-                            "Get product",
+                            "Get",
                             style: TextStyle(
                                 fontSize: 20, fontWeight: FontWeight.bold),
                           )),
@@ -257,158 +282,6 @@ class _DetailsScreenState extends State<DetailsScreen> {
                   ),
           )
         ],
-      ),
-    );
-  }
-}
-
-class _Content extends StatelessWidget {
-  const _Content({
-    Key? key,
-    required this.lat,
-    required this.long,
-    required this.location,
-    required this.description,
-  }) : super(key: key);
-
-  final double lat;
-  final double long;
-  final String location;
-  final String description;
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 12.0),
-      child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-        Padding(
-          padding: const EdgeInsets.symmetric(vertical: 10),
-          child: TextButton(
-              onPressed: () {
-                Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => DirectionScreen(
-                          lat: lat,
-                          long: long,
-                        )));
-              },
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  // const Expanded(child: Icon(Icons.location_on)),
-                  Expanded(
-                    child: Text(
-                      location,
-                      style: const TextStyle(fontSize: 15),
-                    ),
-                  )
-                ],
-              )),
-        ),
-        Padding(
-          padding: const EdgeInsets.only(top: 8.0),
-          child: Text(
-            description,
-            style: const TextStyle(fontSize: 18),
-          ),
-        ),
-        const SizedBox(height: 10)
-      ]),
-    );
-  }
-}
-
-class _Title extends StatelessWidget {
-  final String productName;
-  final String catagory;
-  final String description;
-  final String price;
-  final String weekEndPrice;
-  final double lat;
-  final double long;
-
-  final String location;
-  const _Title(
-      {required this.productName,
-      required this.catagory,
-      required this.description,
-      required this.price,
-      required this.weekEndPrice,
-      required this.location,
-      required this.lat,
-      required this.long});
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 12.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            productName,
-            style: const TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
-          ),
-          Row(
-            children: const [
-              Icon(
-                Icons.star,
-                color: Colors.yellow,
-                size: 20,
-              ),
-              Icon(
-                Icons.star,
-                color: Colors.yellow,
-                size: 20,
-              ),
-              Icon(
-                Icons.star,
-                color: Colors.yellow,
-                size: 20,
-              ),
-              Icon(
-                Icons.star,
-                color: Colors.yellow,
-                size: 20,
-              ),
-            ],
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 8),
-            child: Text("Catagory product belongs: $catagory",
-                style: const TextStyle(fontSize: 16)),
-          ),
-          Prices(price: price, weekendPrice: weekEndPrice),
-        ],
-      ),
-    );
-  }
-}
-
-class _ImageScroller extends StatelessWidget {
-  final List<dynamic> imagUrls;
-
-  const _ImageScroller({super.key, required this.imagUrls});
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 30),
-      child: CarouselSlider(
-        options: CarouselOptions(
-          height: 400,
-          autoPlay: true,
-          // autoPlayCurve: Curves.fastOutSlowIn,
-          enlargeCenterPage: true,
-        ),
-        items: imagUrls.map((image) {
-          return Container(
-            width: 400,
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(20),
-                image: DecorationImage(
-                    image: NetworkImage(image), fit: BoxFit.cover)),
-          );
-        }).toList(),
       ),
     );
   }

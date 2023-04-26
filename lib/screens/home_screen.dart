@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:rent/func/google_sign_in.dart';
+import 'package:rent/screens/catagories_screen.dart';
 import '../screens/screens.dart';
 import 'package:rent/widgets/widget.dart';
 
@@ -17,26 +18,8 @@ class _HomeScreenState extends State<HomeScreen> {
   final FocusNode _focusNode = FocusNode();
   final TextEditingController _searchController = TextEditingController();
 
-  final List<String> items = [
-    'Item 12',
-    'Item 2',
-    'Item 3',
-    'Item 4',
-    'Item 5',
-    "Items test"
-  ];
-
   @override
   Widget build(BuildContext context) {
-    // void hadleSearch(String query) {
-    //   if (query.isNotEmpty) {
-    //     showSearch(
-    //         context: context,
-    //         delegate: ProductDelegate(items: items),
-    //         query: query);
-    //   }
-    // }
-
     final brightness = Theme.of(context).brightness;
 
     return GestureDetector(
@@ -75,7 +58,7 @@ class _HomeScreenState extends State<HomeScreen> {
               preferredSize: const Size.fromHeight(50),
               child: Padding(
                 padding:
-                    const EdgeInsets.symmetric(horizontal: 14.0, vertical: 12),
+                    const EdgeInsets.symmetric(vertical: 12, horizontal: 14),
                 child: Container(
                   height: 45,
                   padding: const EdgeInsets.only(left: 10),
@@ -120,87 +103,6 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 }
 
-// class ProductDelegate extends SearchDelegate<String> {
-//   final List<String> items;
-//   ProductDelegate({required this.items});
-
-//   List<String> recentSearches = [
-//     'Item 1',
-//     'Item 2',
-//     'Item 3',
-//     'Item 4',
-//     'Item 5',
-//   ];
-//   @override
-//   String get searchFieldLabel => 'Search products';
-
-//   @override
-//   List<Widget> buildActions(BuildContext context) {
-//     return [
-//       IconButton(
-//         icon: const Icon(Icons.clear),
-//         onPressed: () {
-//           query = '';
-//         },
-//       )
-//     ];
-//   }
-
-//   @override
-//   Widget buildLeading(BuildContext context) {
-//     return IconButton(
-//       icon: const Icon(Icons.arrow_back),
-//       onPressed: () {
-//         close(context, '');
-//       },
-//     );
-//   }
-
-//   @override
-//   Widget buildResults(BuildContext context) {
-//     List<String> results = items
-//         .where((item) => item.toLowerCase().contains(query.toLowerCase()))
-//         .toList();
-
-//     return ListView.builder(
-//         itemCount: results.length,
-//         itemBuilder: (BuildContext context, int index) {
-//           return ListTile(
-//             title: Text(results[index]),
-//             onTap: () {
-//               query = results[index];
-//               showResults(context);
-//               Navigator.of(context).push(MaterialPageRoute(
-//                   builder: (context) => SearchScreen(
-//                         search: "",
-//                         header: query,
-//                       )));
-//             },
-//           );
-//         });
-//   }
-
-//   @override
-//   Widget buildSuggestions(BuildContext context) {
-//     List<String> suggestions = query.isEmpty
-//         ? items
-//         : items
-//             .where((item) => item.toLowerCase().contains(query.toLowerCase()))
-//             .toList();
-//     return ListView.builder(
-//         itemCount: suggestions.length,
-//         itemBuilder: (BuildContext context, int index) {
-//           return ListTile(
-//             title: Text(suggestions[index]),
-//             onTap: () {
-//               query = suggestions[index];
-//               showResults(context);
-//             },
-//           );
-//         });
-//   }
-// }
-
 class _UnfocusMode extends StatelessWidget {
   const _UnfocusMode({
     Key? key,
@@ -208,7 +110,7 @@ class _UnfocusMode extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const CustomScrollView(
+    return CustomScrollView(
       slivers: [
         SliverToBoxAdapter(child: _Catagories()),
         SliverToBoxAdapter(child: _MostPopular()),
@@ -258,9 +160,66 @@ class _SignOutButton extends StatelessWidget {
 }
 
 class _Catagories extends StatelessWidget {
-  const _Catagories({
+  _Catagories({
     Key? key,
   }) : super(key: key);
+
+  final List<Map<String, String>> catagoryData = [
+    {
+      'name': "Electronics",
+      'description':
+          'This category include items like laptops, projectors, cameras, and other electronic devices.',
+      'image': 'assets/images/electronic.png',
+    },
+    {
+      'name': 'Home appliance',
+      'description':
+          "This category include items like air conditioners, refrigerators, washing machines, and other appliances.",
+      'image': "assets/images/home-appliance.png"
+    },
+    {
+      "name": "Furniture",
+      "description":
+          "This category include items like beds, sofas, chairs, tables, and other furniture pieces.",
+      "image": "assets/images/furnitures.png"
+    },
+    {
+      'name': "Sports and Fitness",
+      'description':
+          "This category include items like bicycles, gym equipment, sports gear, and other fitness-related items.",
+      'image': "assets/images/fitness.png"
+    },
+    {
+      'name': "Tools and Equipment",
+      'description':
+          "This category can include items like power tools, hand tools, and other equipment for construction, home repairs, and other projects.",
+      'image': "assets/images/toolbox.png"
+    },
+    {
+      'name': "Clothing and Accessories",
+      'description':
+          "This category can include items like formal wear, costumes, and accessories that are often rented for special events.",
+      'image': "assets/images/handbag.png"
+    },
+    {
+      'name': "Party and Event",
+      'description':
+          "This category can include items like party decorations, sound systems, lighting equipment, and other items that are often rented for events.",
+      'image': "assets/images/people.png"
+    },
+    {
+      'name': "Camping and Outdoors",
+      'description':
+          "This category can include items like tents, sleeping bags, and other camping gear.",
+      'image': "assets/images/tent.png"
+    },
+    {
+      'name': "Vehicles",
+      'description':
+          "This category can include items like bicycles, scooters, and cars that are often rented for short periods of time.",
+      'image': "assets/images/car.png"
+    },
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -271,37 +230,29 @@ class _Catagories extends StatelessWidget {
           title: "Categories",
         ),
         SizedBox(
-          height: 120,
-          child: ListView(
-            scrollDirection: Axis.horizontal,
-            children: const [
-              CatagoryBox(
-                  name: "Electric",
-                  url:
-                      "https://th.bing.com/th/id/R.fc2f064b07408772f3b10c6ac237ea77?rik=Ec6ViyajY83x4A&pid=ImgRaw&r=0"),
-              CatagoryBox(
-                  name: "Electric",
-                  url:
-                      "https://th.bing.com/th/id/R.fc2f064b07408772f3b10c6ac237ea77?rik=Ec6ViyajY83x4A&pid=ImgRaw&r=0"),
-              CatagoryBox(
-                  name: "Electric",
-                  url:
-                      "https://th.bing.com/th/id/R.fc2f064b07408772f3b10c6ac237ea77?rik=Ec6ViyajY83x4A&pid=ImgRaw&r=0"),
-              CatagoryBox(
-                  name: "Electric",
-                  url:
-                      "https://th.bing.com/th/id/R.fc2f064b07408772f3b10c6ac237ea77?rik=Ec6ViyajY83x4A&pid=ImgRaw&r=0"),
-              CatagoryBox(
-                  name: "Electric",
-                  url:
-                      "https://th.bing.com/th/id/R.fc2f064b07408772f3b10c6ac237ea77?rik=Ec6ViyajY83x4A&pid=ImgRaw&r=0"),
-              CatagoryBox(
-                  name: "Electric",
-                  url:
-                      "https://th.bing.com/th/id/R.fc2f064b07408772f3b10c6ac237ea77?rik=Ec6ViyajY83x4A&pid=ImgRaw&r=0"),
-            ],
-          ),
-        )
+          height: 140,
+          child: ListView.builder(
+              scrollDirection: Axis.horizontal,
+              itemCount: catagoryData.length,
+              itemBuilder: (context, index) {
+                final category = catagoryData[index];
+                return GestureDetector(
+                  onTap: () => Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => Catagories(
+                          catagory: category['name'].toString(),
+                          des: category['description'].toString()))),
+                  child: SizedBox(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 8.0),
+                      child: CatagoryBox(
+                        name: category['name'].toString(),
+                        url: category['image'].toString(),
+                      ),
+                    ),
+                  ),
+                );
+              }),
+        ),
       ],
     );
   }
@@ -345,7 +296,7 @@ class _Recommended extends StatelessWidget {
         const HeaderTitles(title: "Recommended"),
         SizedBox(
           height: 250,
-          child: ListView(scrollDirection: Axis.horizontal, children: const [
+          child: ListView(scrollDirection: Axis.horizontal, children: [
             MostPopular(),
             MostPopular(),
             MostPopular(),

@@ -8,6 +8,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:rent/models/product.dart';
 import 'package:rent/screens/direction_screen.dart';
 import 'package:rent/widgets/pirces.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../screens/screens.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -21,6 +22,7 @@ class PreviewScreen extends StatefulWidget {
   final double lat;
   final double long;
   final String location;
+  final String phoneNumber;
 
   const PreviewScreen(
       {super.key,
@@ -32,7 +34,8 @@ class PreviewScreen extends StatefulWidget {
       required this.weekendPrice,
       required this.lat,
       required this.long,
-      required this.location});
+      required this.location,
+      required this.phoneNumber});
 
   @override
   State<PreviewScreen> createState() => _PreviewScreenState();
@@ -72,12 +75,26 @@ class _PreviewScreenState extends State<PreviewScreen> {
         userID: _getuserId(),
         lat: widget.lat,
         long: widget.long,
-        location: widget.location);
+        location: widget.location,
+        phoneNumber: widget.phoneNumber);
     final json = product.toJson();
     await doc.set(json);
     setState(() {
       isLoading = false;
     });
+  }
+
+  void makeCalls(String phoneNumber) async {
+    String telUrl = 'tel:0705980290';
+    if (await canLaunchUrl(Uri.parse(telUrl))) {
+      await launchUrl(Uri.parse(telUrl));
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Could not launch $telUrl'),
+        ),
+      );
+    }
   }
 
   @override
@@ -89,13 +106,24 @@ class _PreviewScreenState extends State<PreviewScreen> {
         backgroundColor: Colors.transparent,
         centerTitle: true,
         elevation: 0,
-        title: Text(
+        title: const Text(
           "Confirm your Product",
-          style: TextStyle(
-              color:
-                  brightness == Brightness.light ? Colors.black : Colors.white),
         ),
+        titleTextStyle: Theme.of(context).textTheme.headline6,
+        actions: [
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 18.0),
+            child: GestureDetector(
+                onTap: () => makeCalls(widget.phoneNumber),
+                child: const Icon(Icons.phone)),
+          )
+        ],
       ),
+      // floatingActionButton: FloatingActionButton(
+      //   onPressed: () => makeCalls(widget.phoneNumber),
+      //   tooltip: "call",
+      //   child: const Icon(Icons.phone),
+      // ),
       body: CustomScrollView(slivers: [
         SliverToBoxAdapter(
           child: _ImageSlider(images: widget.images),
@@ -298,7 +326,7 @@ class _ImageSlider extends StatelessWidget {
               height: 400,
               decoration: BoxDecoration(
                   image: DecorationImage(
-                      image: FileImage(image), fit: BoxFit.fill),
+                      image: FileImage(image), fit: BoxFit.cover),
                   borderRadius: BorderRadius.circular(20)),
             );
           }).toList()),

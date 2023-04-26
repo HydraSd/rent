@@ -23,26 +23,27 @@ class _MapScreenState extends State<MapScreen> {
   late String placeholder = "";
   final Set<Marker> _marker = {};
 
-  // String? _mapStyle;
+  String? mapStyle;
   @override
   void initState() {
     super.initState();
     _getLocation();
-    // _loadMapStyle();
+    _loadMapStyle();
     _places = GoogleMapsPlaces(apiKey: api);
   }
 
-  // Future<void> _loadMapStyle() async {
-  //   final String style = await DefaultAssetBundle.of(context)
-  //       .loadString('assets/map_style.json');
-  //   setState(() {
-  //     _mapStyle = style;
-  //   });
-  // }
+  Future<void> _loadMapStyle() async {
+    final String style = await DefaultAssetBundle.of(context)
+        .loadString('assets/map_style.json');
+    setState(() {
+      mapStyle = style;
+    });
+  }
 
   Future<void> _onMapCreated(GoogleMapController controller) async {
     setState(() {
       _mapController = controller;
+      _mapController!.setMapStyle(mapStyle);
     });
   }
   // Future<void> _onMapController(GoogleMapController controller) async {
@@ -68,14 +69,6 @@ class _MapScreenState extends State<MapScreen> {
       onTap: () => _focusNode.unfocus(),
       child: Scaffold(
         appBar: AppBar(
-          leading: GestureDetector(
-              onTap: () => Navigator.pop(context, {
-                    "latitude": _currentLocation!.latitude,
-                    "longitude": _currentLocation!.longitude,
-                    // "currentLocation": _currentLocation,
-                    "location": locationDis,
-                  }),
-              child: const Icon(Icons.arrow_back)),
           backgroundColor: Colors.transparent,
           elevation: 0,
           iconTheme: Theme.of(context).iconTheme,
@@ -149,6 +142,21 @@ class _MapScreenState extends State<MapScreen> {
                 ),
               ),
             ),
+          ),
+        ),
+        floatingActionButton: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 20),
+          alignment: Alignment.bottomLeft,
+          child: FloatingActionButton(
+            onPressed: () {
+              Navigator.pop(context, {
+                "latitude": _currentLocation!.latitude,
+                "longitude": _currentLocation!.longitude,
+                // "currentLocation": _currentLocation,
+                "location": locationDis,
+              });
+            },
+            child: const Icon(Icons.add),
           ),
         ),
         body: GoogleMap(
