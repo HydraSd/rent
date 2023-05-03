@@ -36,7 +36,7 @@ class _HomeScreenState extends State<HomeScreen> {
             elevation: 0,
             title: Padding(
               padding: const EdgeInsets.only(top: 8.0),
-              child: Text("Discover",
+              child: Text("RentMate",
                   style: (brightness == Brightness.light)
                       ? const TextStyle(
                           color: Colors.black,

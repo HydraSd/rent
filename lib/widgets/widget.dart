@@ -9,3 +9,6 @@ export 'image_selecor.dart';
 export 'details_title.dart';
 export 'detail_content.dart';
 export 'image_scroller.dart';
+export 'text.dart';
+export 'text_widget.dart';
+export 'account_btn.dart';

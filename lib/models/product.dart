@@ -13,6 +13,8 @@ class Product {
   final double long;
   final String location;
   final String phoneNumber;
+  final String requests;
+
   Product(
       {this.id = '',
       required this.price,
@@ -25,7 +27,8 @@ class Product {
       required this.lat,
       required this.long,
       required this.location,
-      required this.phoneNumber});
+      required this.phoneNumber,
+      this.requests = '0'});
 
   Map<String, dynamic> toJson() => {
         'imgUrl': imgUrl,
@@ -39,6 +42,7 @@ class Product {
         'location': location,
         'lat': lat,
         'long': long,
-        'phoneNumber': phoneNumber
+        'phoneNumber': phoneNumber,
+        'requests': requests
       };
 }

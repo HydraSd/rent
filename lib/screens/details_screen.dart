@@ -21,20 +21,22 @@ class DetailsScreen extends StatefulWidget {
   final String userID;
   final String documentId;
   final String phoneNumber;
-  const DetailsScreen(
-      {super.key,
-      required this.imgurls,
-      required this.productName,
-      required this.catagory,
-      required this.description,
-      required this.price,
-      required this.weekEndPrice,
-      required this.location,
-      required this.lat,
-      required this.long,
-      required this.userID,
-      required this.documentId,
-      required this.phoneNumber});
+
+  const DetailsScreen({
+    super.key,
+    required this.imgurls,
+    required this.productName,
+    required this.catagory,
+    required this.description,
+    required this.price,
+    required this.weekEndPrice,
+    required this.location,
+    required this.lat,
+    required this.long,
+    required this.userID,
+    required this.documentId,
+    required this.phoneNumber,
+  });
 
   @override
   State<DetailsScreen> createState() => _DetailsScreenState();
@@ -261,7 +263,10 @@ class _DetailsScreenState extends State<DetailsScreen> {
                     padding: const EdgeInsets.all(30.0),
                     child: Bounceable(
                       onTap: () => Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => UserDetailsScreen())),
+                          builder: (context) => UserDetailsScreen(
+                                productName: widget.productName,
+                                userId: widget.userID,
+                              ))),
                       child: Material(
                         elevation: 10,
                         borderRadius: BorderRadius.circular(10),
@@ -272,7 +277,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                               color: Colors.blue),
                           child: const Center(
                               child: Text(
-                            "Get",
+                            "Request Product",
                             style: TextStyle(
                                 fontSize: 20, fontWeight: FontWeight.bold),
                           )),

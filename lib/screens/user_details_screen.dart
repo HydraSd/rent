@@ -1,19 +1,41 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:custom_check_box/custom_check_box.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bounceable/flutter_bounceable.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
+import 'package:rent/models/request.dart';
+import 'package:rent/widgets/text_widget.dart';
 
 class UserDetailsScreen extends StatefulWidget {
-  const UserDetailsScreen({super.key});
+  final String userId;
+  final String productName;
+  const UserDetailsScreen(
+      {super.key, required this.userId, required this.productName});
 
   @override
   State<UserDetailsScreen> createState() => _UserDetailsScreenState();
 }
 
 class _UserDetailsScreenState extends State<UserDetailsScreen> {
-  TextEditingController numberController = TextEditingController();
+  TextEditingController phoneController = TextEditingController();
+  TextEditingController idNumberController = TextEditingController();
+  final user = FirebaseAuth.instance.currentUser!;
 
   bool template = false;
+  String? phoneNumber;
+
+  Future<void> requestProduct() async {
+    final doc = FirebaseFirestore.instance.collection('request').doc();
+    final request = Request(
+        userId: widget.userId,
+        contactNumber: phoneNumber!,
+        idNumber: idNumberController.text,
+        userName: "${user.displayName}",
+        productName: widget.productName);
+    final json = request.toJson();
+    await doc.set(json);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -40,7 +62,9 @@ class _UserDetailsScreenState extends State<UserDetailsScreen> {
             child: InternationalPhoneNumberInput(
               initialValue: PhoneNumber(isoCode: 'LK', dialCode: '+94'),
               onInputChanged: (PhoneNumber number) {
-                print(number.phoneNumber);
+                setState(() {
+                  phoneNumber = "${number.phoneNumber}";
+                });
               },
               inputBorder: InputBorder.none,
               selectorConfig: const SelectorConfig(
@@ -56,22 +80,9 @@ class _UserDetailsScreenState extends State<UserDetailsScreen> {
             ),
           ),
         ),
-        Padding(
-          padding: const EdgeInsets.only(left: 18.0, right: 18, top: 14),
-          child: Container(
-            padding: const EdgeInsets.only(left: 10),
-            height: 50,
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(5),
-                color: Theme.of(context).cardColor),
-            child: TextFormField(
-              controller: numberController,
-              decoration: const InputDecoration(
-                  hintText: "Enter your national ID number",
-                  border: InputBorder.none),
-            ),
-          ),
-        ),
+        TextFieldWidget(
+            placeHolder: "Enter your national ID number",
+            controller: idNumberController),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 18.0),
           child: Row(
@@ -95,10 +106,12 @@ class _UserDetailsScreenState extends State<UserDetailsScreen> {
           ),
         ),
         const SizedBox(height: 30),
+        // MainButton(func: requestProduct())
         SizedBox(
           width: 150,
           child: Bounceable(
             onTap: () {
+              requestProduct();
               // NotificationApi.showNotification(
               //     title: 'sandhil', body: 'test product', payload: 'san.com');
             },

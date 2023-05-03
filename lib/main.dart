@@ -1,5 +1,6 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+// import 'package:native_notify/native_notify.dart';
 import 'package:provider/provider.dart';
 import 'package:rent/func/google_sign_in.dart';
 import 'package:rent/screens/no_internet.dart';
@@ -20,10 +21,10 @@ void main() async {
   };
   // WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
   WidgetsFlutterBinding.ensureInitialized();
+  // NativeNotify.initialize(2883, 'Jx2CSbGZcFtbDfRIia6jvG');
   await Firebase.initializeApp();
-  // FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
+
   runApp(const MyApp());
-  // FlutterNativeSplash.remove();
 }
 
 class MyApp extends StatefulWidget {

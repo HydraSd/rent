@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:rent/screens/notification_screen.dart';
 import 'package:rent/screens/screens.dart';
 
 class SideBar extends StatelessWidget {
@@ -44,13 +45,38 @@ class SideBar extends StatelessWidget {
           ),
         ),
         GestureDetector(
-          onTap: () => Navigator.of(context)
-              .push(MaterialPageRoute(builder: (context) => YourProducts())),
+          onTap: () => Navigator.of(context).push(
+              MaterialPageRoute(builder: (context) => const YourProducts())),
           child: const ListTile(
             leading: Icon(Icons.attach_money_sharp),
             title: Text(
               "Your products",
               style: TextStyle(fontSize: 16),
+            ),
+          ),
+        ),
+        GestureDetector(
+          onTap: () => Navigator.of(context).push(MaterialPageRoute(
+              builder: (context) => const NotificationScreen())),
+          child: ListTile(
+            leading: const Icon(Icons.notifications),
+            title: const Text(
+              "Notification",
+              style: TextStyle(fontSize: 16),
+            ),
+            trailing: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 12.0),
+              child: Container(
+                alignment: Alignment.center,
+                height: 20,
+                width: 20,
+                decoration: const BoxDecoration(
+                    shape: BoxShape.circle, color: Colors.blue),
+                child: const Text(
+                  "1",
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
+              ),
             ),
           ),
         )
