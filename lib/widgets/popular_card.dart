@@ -2,9 +2,14 @@ import 'package:flutter/material.dart';
 
 // ignore: must_be_immutable
 class MostPopular extends StatelessWidget {
-  MostPopular({
-    Key? key,
-  }) : super(key: key);
+  String productName;
+  String imgURL;
+  MostPopular(
+      {Key? key,
+      this.productName = '',
+      this.imgURL =
+          'https://th.bing.com/th/id/OIP.HxV79tFMPfBAIo0BBF-sOgHaEy?pid=ImgDet&rs=1'})
+      : super(key: key);
 
   bool rented = false;
 
@@ -26,13 +31,17 @@ class MostPopular extends StatelessWidget {
               width: 200,
               child: Column(
                 children: [
-                  ClipRRect(
-                    borderRadius: const BorderRadius.only(
-                        topLeft: Radius.circular(10),
-                        topRight: Radius.circular(10)),
-                    child: Image.network(
-                      "https://th.bing.com/th/id/OIP.HxV79tFMPfBAIo0BBF-sOgHaEy?pid=ImgDet&rs=1",
-                      fit: BoxFit.cover,
+                  SizedBox(
+                    height: 150,
+                    width: 200,
+                    child: ClipRRect(
+                      borderRadius: const BorderRadius.only(
+                          topLeft: Radius.circular(10),
+                          topRight: Radius.circular(10)),
+                      child: Image.network(
+                        imgURL,
+                        fit: BoxFit.cover,
+                      ),
                     ),
                   ),
                   Expanded(
@@ -45,10 +54,10 @@ class MostPopular extends StatelessWidget {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              const Expanded(
+                              Expanded(
                                 child: Text(
-                                  "HeadSet",
-                                  style: TextStyle(
+                                  productName,
+                                  style: const TextStyle(
                                       fontSize: 16,
                                       fontWeight: FontWeight.w700),
                                 ),

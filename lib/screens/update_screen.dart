@@ -110,8 +110,8 @@ class _UpdateScreenState extends State<UpdateScreen> {
     }
   }
 
-  Future<void> updateDocument(String documentId, String productName,
-      String price, String description, String catagory) async {
+  Future<void> updateDocument(String productName, String price,
+      String description, String catagory) async {
     final CollectionReference collectionReference =
         FirebaseFirestore.instance.collection('test');
     final DocumentReference documentReference =
@@ -202,8 +202,8 @@ class _UpdateScreenState extends State<UpdateScreen> {
                 child: const Text("Cancel")),
             TextButton(
                 onPressed: () {
-                  updateDocument(widget.documentId, nameController.text,
-                      priceController.text, desController.text, _selectedItem!);
+                  updateDocument(nameController.text, priceController.text,
+                      desController.text, _selectedItem!);
                   Navigator.of(context).push(MaterialPageRoute(
                       builder: (context) => const YourProducts()));
                 },

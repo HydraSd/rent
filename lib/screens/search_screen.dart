@@ -146,6 +146,7 @@ class _SearchScreenState extends State<SearchScreen> {
                             location: product['location'],
                             userID: product['userId'],
                             phoneNumber: product['phoneNumber'],
+                            request: product['requests'],
                           ))),
                 );
               });

@@ -2,9 +2,12 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:rent/func/google_sign_in.dart';
+import 'package:rent/models/product.dart';
 import 'package:rent/screens/catagories_screen.dart';
 import '../screens/screens.dart';
 import 'package:rent/widgets/widget.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -258,8 +261,40 @@ class _Catagories extends StatelessWidget {
   }
 }
 
-class _MostPopular extends StatelessWidget {
+class _MostPopular extends StatefulWidget {
   const _MostPopular();
+
+  @override
+  State<_MostPopular> createState() => _MostPopularState();
+}
+
+class _MostPopularState extends State<_MostPopular> {
+  List? topProducts;
+  Future<List<Map<String, dynamic>>> getTopRequested() async {
+    CollectionReference productsRef =
+        FirebaseFirestore.instance.collection('test');
+    QuerySnapshot topProductsSnapshot =
+        await productsRef.orderBy('requests', descending: true).limit(10).get();
+
+    List<Map<String, dynamic>> topProductsData = [];
+    for (DocumentSnapshot productSnapshot in topProductsSnapshot.docs) {
+      Map<String, dynamic> productData =
+          productSnapshot.data() as Map<String, dynamic>;
+      topProductsData.add(productData);
+    }
+    List<Map<String, dynamic>> topTenProductsData =
+        topProductsData.take(10).toList();
+    setState(() {
+      topProducts = topTenProductsData;
+    });
+    return topTenProductsData;
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getTopRequested();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -267,20 +302,35 @@ class _MostPopular extends StatelessWidget {
       children: [
         const HeaderTitles(title: "Most popular"),
         SizedBox(
-          height: 250,
-          child: ListView(scrollDirection: Axis.horizontal, children: [
-            InkWell(
-                onTap: () {
-                  // Navigator.of(context).push(DetailsScreen.route());
-                  // Navigator.of(context).push(MaterialPageRoute(
-                  //     builder: (context) => const DetailsScreen()));
-                },
-                child: MostPopular()),
-            MostPopular(),
-            MostPopular(),
-            MostPopular(),
-          ]),
-        ),
+            height: 250,
+            child: ListView.builder(
+                scrollDirection: Axis.horizontal,
+                itemCount: topProducts?.length ?? 0,
+                itemBuilder: (BuildContext context, int index) {
+                  var product = topProducts![index];
+                  return GestureDetector(
+                    onTap: () => Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => DetailsScreen(
+                              documentId: '',
+                              lat: product['lat'],
+                              long: product['long'],
+                              imgurls: product["imgUrl"],
+                              productName: product["productName"],
+                              catagory: product["category"],
+                              description: product["description"],
+                              price: product['price'],
+                              weekEndPrice: product['weekendPrice'],
+                              location: product['location'],
+                              userID: product['userId'],
+                              phoneNumber: product['phoneNumber'],
+                              request: product['requests'],
+                            ))),
+                    child: MostPopular(
+                      productName: product["productName"],
+                      imgURL: product["imgUrl"][0],
+                    ),
+                  );
+                })),
       ],
     );
   }

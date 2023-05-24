@@ -20,6 +20,7 @@ class DetailsScreen extends StatefulWidget {
   final double long;
   final String userID;
   final String documentId;
+  final int request;
   final String phoneNumber;
 
   const DetailsScreen({
@@ -36,6 +37,7 @@ class DetailsScreen extends StatefulWidget {
     required this.userID,
     required this.documentId,
     required this.phoneNumber,
+    required this.request,
   });
 
   @override
@@ -122,6 +124,45 @@ class _DetailsScreenState extends State<DetailsScreen> {
       }
     }
 
+    String? startDateF;
+    String? endDateF;
+
+    void handleDateRangeSelected(String? startDate, String? endDate) {
+      // Use the selected startDate and endDate here
+      setState(() {
+        startDateF = startDate;
+        endDateF = endDate;
+      });
+      print('Selected date range: $startDateF - $endDateF');
+    }
+
+    void navigateToUserDetailsScreen() {
+      print(startDateF);
+      if (startDateF != null && endDateF != null) {
+        Future.delayed(Duration.zero, () {
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => UserDetailsScreen(
+                userId: widget.userID,
+                productName: widget.productName,
+                requests: widget.request,
+                documentId: widget.documentId,
+                startDate: startDateF!,
+                endDate: endDateF!,
+              ),
+            ),
+          );
+        });
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Please select a start and end date.'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+    }
+
     return Scaffold(
       appBar: AppBar(
         iconTheme: Theme.of(context).iconTheme,
@@ -163,29 +204,10 @@ class _DetailsScreenState extends State<DetailsScreen> {
             ),
           ),
           SliverToBoxAdapter(
-            child: Center(
-                child: TextButton(
-              onPressed: () async {
-                final DateTimeRange? dateTimeRange = await showDateRangePicker(
-                  context: context,
-                  firstDate: DateTime(2000),
-                  lastDate: DateTime(3000),
-                );
-                if (dateTimeRange != null) {
-                  final DateTime startDate = dateTimeRange.start;
-                  final DateTime endDate = dateTimeRange.end;
-                  print("$startDate to $endDate");
-                }
-              },
-              child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: const [
-                    Icon(Icons.calendar_month_outlined),
-                    SizedBox(width: 10),
-                    Text("Choose date")
-                  ]),
-            )),
-          ),
+              child: CalendarWid(
+            onDateRangeSelected: handleDateRangeSelected,
+            navigateToUserDetailsScreen: navigateToUserDetailsScreen,
+          )),
           SliverToBoxAdapter(
             child: Content(
               lat: widget.lat,
@@ -198,37 +220,11 @@ class _DetailsScreenState extends State<DetailsScreen> {
             child: (getUserId() == widget.userID)
                 ? Column(
                     children: [
-                      Padding(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 30, vertical: 4),
-                        child: Bounceable(
-                          onTap: () {
-                            Navigator.of(context).push(MaterialPageRoute(
-                                builder: (context) => UpdateScreen(
-                                      documentId: widget.documentId,
-                                      productName: widget.productName,
-                                      price: widget.price,
-                                      description: widget.description,
-                                    )));
-                          },
-                          child: Material(
-                            elevation: 10,
-                            borderRadius: BorderRadius.circular(10),
-                            child: Container(
-                              height: 50,
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(10),
-                                  color: Colors.blue),
-                              child: const Center(
-                                  child: Text(
-                                "Update product",
-                                style: TextStyle(
-                                    fontSize: 20, fontWeight: FontWeight.bold),
-                              )),
-                            ),
-                          ),
-                        ),
-                      ),
+                      DeleteUpdate(
+                          documentId: widget.documentId,
+                          price: widget.price,
+                          productName: widget.productName,
+                          description: widget.description),
                       Padding(
                         padding: const EdgeInsets.symmetric(
                             horizontal: 30, vertical: 4),
@@ -259,31 +255,11 @@ class _DetailsScreenState extends State<DetailsScreen> {
                       )
                     ],
                   )
-                : Padding(
-                    padding: const EdgeInsets.all(30.0),
-                    child: Bounceable(
-                      onTap: () => Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => UserDetailsScreen(
-                                productName: widget.productName,
-                                userId: widget.userID,
-                              ))),
-                      child: Material(
-                        elevation: 10,
-                        borderRadius: BorderRadius.circular(10),
-                        child: Container(
-                          height: 50,
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10),
-                              color: Colors.blue),
-                          child: const Center(
-                              child: Text(
-                            "Request Product",
-                            style: TextStyle(
-                                fontSize: 20, fontWeight: FontWeight.bold),
-                          )),
-                        ),
-                      ),
-                    ),
+                : Bounceable(
+                    onTap: () {
+                      navigateToUserDetailsScreen();
+                    },
+                    child: const RequestBtn(),
                   ),
           )
         ],

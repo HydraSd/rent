@@ -66,6 +66,7 @@ class _YourProductsState extends State<YourProducts> {
                               location: product['location'],
                               userID: product['userId'],
                               phoneNumber: product['phoneNumber'],
+                              request: product['requests'],
                             ))),
                 child: ListTile(
                   leading: Container(

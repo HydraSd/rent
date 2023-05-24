@@ -60,6 +60,7 @@ class Catagories extends StatelessWidget {
                                     location: product['location'],
                                     userID: product['userId'],
                                     phoneNumber: product['phoneNumber'],
+                                    request: product['requests'],
                                   ))),
                       child: ListTile(
                         leading: Container(

@@ -10,8 +10,18 @@ import 'package:rent/widgets/text_widget.dart';
 class UserDetailsScreen extends StatefulWidget {
   final String userId;
   final String productName;
+  final int requests;
+  final String documentId;
+  final String startDate;
+  final String endDate;
   const UserDetailsScreen(
-      {super.key, required this.userId, required this.productName});
+      {super.key,
+      required this.userId,
+      required this.productName,
+      required this.requests,
+      required this.documentId,
+      required this.startDate,
+      required this.endDate});
 
   @override
   State<UserDetailsScreen> createState() => _UserDetailsScreenState();
@@ -35,6 +45,18 @@ class _UserDetailsScreenState extends State<UserDetailsScreen> {
         productName: widget.productName);
     final json = request.toJson();
     await doc.set(json);
+  }
+
+  Future<void> requestUpdate(String documentId, int request) async {
+    final CollectionReference collectionReference =
+        FirebaseFirestore.instance.collection('test');
+    final DocumentReference documentReference =
+        collectionReference.doc(widget.documentId);
+    try {
+      await documentReference.update({'requests': request + 1});
+    } catch (e) {
+      rethrow;
+    }
   }
 
   @override
@@ -105,6 +127,7 @@ class _UserDetailsScreenState extends State<UserDetailsScreen> {
             ],
           ),
         ),
+        Text(widget.startDate),
         const SizedBox(height: 30),
         // MainButton(func: requestProduct())
         SizedBox(
@@ -112,6 +135,8 @@ class _UserDetailsScreenState extends State<UserDetailsScreen> {
           child: Bounceable(
             onTap: () {
               requestProduct();
+              requestUpdate(widget.documentId, widget.requests);
+              Navigator.pop(context);
               // NotificationApi.showNotification(
               //     title: 'sandhil', body: 'test product', payload: 'san.com');
             },

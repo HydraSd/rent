@@ -91,7 +91,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
                                         CrossAxisAlignment.start,
                                     children: [
                                       Text(
-                                        request["RequestedUser"],
+                                        request['RequestedUser'],
                                         style: const TextStyle(
                                             fontWeight: FontWeight.bold,
                                             fontSize: 16),

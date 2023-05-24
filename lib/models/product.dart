@@ -1,5 +1,3 @@
-import 'package:google_maps_flutter/google_maps_flutter.dart';
-
 class Product {
   String id;
   final String productName;
@@ -13,7 +11,7 @@ class Product {
   final double long;
   final String location;
   final String phoneNumber;
-  final String requests;
+  final int requests;
 
   Product(
       {this.id = '',
@@ -28,7 +26,7 @@ class Product {
       required this.long,
       required this.location,
       required this.phoneNumber,
-      this.requests = '0'});
+      this.requests = 0});
 
   Map<String, dynamic> toJson() => {
         'imgUrl': imgUrl,
