@@ -2,12 +2,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:rent/func/google_sign_in.dart';
-import 'package:rent/models/product.dart';
-import 'package:rent/screens/catagories_screen.dart';
 import '../screens/screens.dart';
 import 'package:rent/widgets/widget.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:rent/MainCatagories/most_popular_wid.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -31,6 +28,7 @@ class _HomeScreenState extends State<HomeScreen> {
       },
       child: Scaffold(
           drawer: SideBar(
+            userId: "${user.uid}",
             name: "${user.displayName}",
           ),
           appBar: AppBar(
@@ -39,7 +37,7 @@ class _HomeScreenState extends State<HomeScreen> {
             elevation: 0,
             title: Padding(
               padding: const EdgeInsets.only(top: 8.0),
-              child: Text("RentMate",
+              child: Text("RedMix",
                   style: (brightness == Brightness.light)
                       ? const TextStyle(
                           color: Colors.black,
@@ -74,11 +72,13 @@ class _HomeScreenState extends State<HomeScreen> {
                     decoration: InputDecoration(
                         suffixIcon: GestureDetector(
                           onTap: () {
-                            Navigator.of(context).push(MaterialPageRoute(
-                                builder: (context) => SearchScreen(
-                                    header: _searchController.text,
-                                    search: "search")));
-                            // hadleSearch(_searchController.text);
+                            if (_searchController.text != "") {
+                              Navigator.of(context).push(MaterialPageRoute(
+                                  builder: (context) => SearchScreen(
+                                        header: _searchController.text,
+                                        search: _searchController.text,
+                                      )));
+                            }
                           },
                           child: Icon(
                             Icons.search,
@@ -92,8 +92,9 @@ class _HomeScreenState extends State<HomeScreen> {
                     onSubmitted: (value) {
                       Navigator.of(context).push(MaterialPageRoute(
                           builder: (context) => SearchScreen(
-                              header: _searchController.text,
-                              search: "search")));
+                                header: _searchController.text,
+                                search: _searchController.text,
+                              )));
                     },
                   ),
                 ),
@@ -115,9 +116,9 @@ class _UnfocusMode extends StatelessWidget {
   Widget build(BuildContext context) {
     return CustomScrollView(
       slivers: [
-        SliverToBoxAdapter(child: _Catagories()),
-        SliverToBoxAdapter(child: _MostPopular()),
-        SliverToBoxAdapter(child: _Recommended()),
+        SliverToBoxAdapter(child: CatagoriesWid()),
+        const SliverToBoxAdapter(child: MostPopularWid()),
+        const SliverToBoxAdapter(child: _Recommended()),
       ],
     );
   }
@@ -159,180 +160,6 @@ class _SignOutButton extends StatelessWidget {
               );
             }),
         child: Avatar(image: "${user.photoURL}"));
-  }
-}
-
-class _Catagories extends StatelessWidget {
-  _Catagories({
-    Key? key,
-  }) : super(key: key);
-
-  final List<Map<String, String>> catagoryData = [
-    {
-      'name': "Electronics",
-      'description':
-          'This category include items like laptops, projectors, cameras, and other electronic devices.',
-      'image': 'assets/images/electronic.png',
-    },
-    {
-      'name': 'Home appliance',
-      'description':
-          "This category include items like air conditioners, refrigerators, washing machines, and other appliances.",
-      'image': "assets/images/home-appliance.png"
-    },
-    {
-      "name": "Furniture",
-      "description":
-          "This category include items like beds, sofas, chairs, tables, and other furniture pieces.",
-      "image": "assets/images/furnitures.png"
-    },
-    {
-      'name': "Sports and Fitness",
-      'description':
-          "This category include items like bicycles, gym equipment, sports gear, and other fitness-related items.",
-      'image': "assets/images/fitness.png"
-    },
-    {
-      'name': "Tools and Equipment",
-      'description':
-          "This category can include items like power tools, hand tools, and other equipment for construction, home repairs, and other projects.",
-      'image': "assets/images/toolbox.png"
-    },
-    {
-      'name': "Clothing and Accessories",
-      'description':
-          "This category can include items like formal wear, costumes, and accessories that are often rented for special events.",
-      'image': "assets/images/handbag.png"
-    },
-    {
-      'name': "Party and Event",
-      'description':
-          "This category can include items like party decorations, sound systems, lighting equipment, and other items that are often rented for events.",
-      'image': "assets/images/people.png"
-    },
-    {
-      'name': "Camping and Outdoors",
-      'description':
-          "This category can include items like tents, sleeping bags, and other camping gear.",
-      'image': "assets/images/tent.png"
-    },
-    {
-      'name': "Vehicles",
-      'description':
-          "This category can include items like bicycles, scooters, and cars that are often rented for short periods of time.",
-      'image': "assets/images/car.png"
-    },
-  ];
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const HeaderTitles(
-          title: "Categories",
-        ),
-        SizedBox(
-          height: 140,
-          child: ListView.builder(
-              scrollDirection: Axis.horizontal,
-              itemCount: catagoryData.length,
-              itemBuilder: (context, index) {
-                final category = catagoryData[index];
-                return GestureDetector(
-                  onTap: () => Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => Catagories(
-                          catagory: category['name'].toString(),
-                          des: category['description'].toString()))),
-                  child: SizedBox(
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 8.0),
-                      child: CatagoryBox(
-                        name: category['name'].toString(),
-                        url: category['image'].toString(),
-                      ),
-                    ),
-                  ),
-                );
-              }),
-        ),
-      ],
-    );
-  }
-}
-
-class _MostPopular extends StatefulWidget {
-  const _MostPopular();
-
-  @override
-  State<_MostPopular> createState() => _MostPopularState();
-}
-
-class _MostPopularState extends State<_MostPopular> {
-  List? topProducts;
-  Future<List<Map<String, dynamic>>> getTopRequested() async {
-    CollectionReference productsRef =
-        FirebaseFirestore.instance.collection('test');
-    QuerySnapshot topProductsSnapshot =
-        await productsRef.orderBy('requests', descending: true).limit(10).get();
-
-    List<Map<String, dynamic>> topProductsData = [];
-    for (DocumentSnapshot productSnapshot in topProductsSnapshot.docs) {
-      Map<String, dynamic> productData =
-          productSnapshot.data() as Map<String, dynamic>;
-      topProductsData.add(productData);
-    }
-    List<Map<String, dynamic>> topTenProductsData =
-        topProductsData.take(10).toList();
-    setState(() {
-      topProducts = topTenProductsData;
-    });
-    return topTenProductsData;
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    getTopRequested();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        const HeaderTitles(title: "Most popular"),
-        SizedBox(
-            height: 250,
-            child: ListView.builder(
-                scrollDirection: Axis.horizontal,
-                itemCount: topProducts?.length ?? 0,
-                itemBuilder: (BuildContext context, int index) {
-                  var product = topProducts![index];
-                  return GestureDetector(
-                    onTap: () => Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => DetailsScreen(
-                              documentId: '',
-                              lat: product['lat'],
-                              long: product['long'],
-                              imgurls: product["imgUrl"],
-                              productName: product["productName"],
-                              catagory: product["category"],
-                              description: product["description"],
-                              price: product['price'],
-                              weekEndPrice: product['weekendPrice'],
-                              location: product['location'],
-                              userID: product['userId'],
-                              phoneNumber: product['phoneNumber'],
-                              request: product['requests'],
-                            ))),
-                    child: MostPopular(
-                      productName: product["productName"],
-                      imgURL: product["imgUrl"][0],
-                    ),
-                  );
-                })),
-      ],
-    );
   }
 }
 

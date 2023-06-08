@@ -80,7 +80,7 @@ class _MyAppState extends State<MyApp> {
           theme: AppTheme.light(),
           darkTheme: AppTheme.dark(),
           themeMode: ThemeMode.system,
-          home: _isConnected ? Loged() : const NoInternet()),
+          home: _isConnected ? const Loged() : const NoInternet()),
     );
   }
 }

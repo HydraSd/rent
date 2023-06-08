@@ -16,7 +16,7 @@ class NotificationScreen extends StatefulWidget {
 class _NotificationScreenState extends State<NotificationScreen> {
   User? user = FirebaseAuth.instance.currentUser;
   void makeCalls(String phoneNumber) async {
-    String telUrl = 'tel:0705980290';
+    // String telUrl = 'tel:0705980290';
     if (await canLaunchUrl(Uri.parse("tel:$phoneNumber"))) {
       await launchUrl(Uri.parse("tel:$phoneNumber"));
     } else {
@@ -47,6 +47,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
+        iconTheme: Theme.of(context).iconTheme,
         backgroundColor: Colors.transparent,
         title: const Text("Requests"),
         titleTextStyle: Theme.of(context).textTheme.headline6,
@@ -125,7 +126,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
                               ),
                               const SizedBox(height: 10),
                               Text(
-                                  "I like to get your product ${request['ProductName']}"),
+                                  "I like to get your product ${request['ProductName']} from ${request['startDate']} to ${request['endDate']}"),
                               const SizedBox(height: 10),
                               const Text(
                                   "To make the payment you have to accept my request"),

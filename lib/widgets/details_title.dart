@@ -6,7 +6,7 @@ class Title1 extends StatelessWidget {
   final String catagory;
   final String description;
   final String price;
-  final String weekEndPrice;
+
   final double lat;
   final double long;
 
@@ -16,7 +16,6 @@ class Title1 extends StatelessWidget {
       required this.catagory,
       required this.description,
       required this.price,
-      required this.weekEndPrice,
       required this.location,
       required this.lat,
       required this.long});
@@ -61,7 +60,7 @@ class Title1 extends StatelessWidget {
             child: Text("Catagory product belongs: $catagory",
                 style: const TextStyle(fontSize: 16)),
           ),
-          Prices(price: price, weekendPrice: weekEndPrice),
+          Prices(price: price),
         ],
       ),
     );

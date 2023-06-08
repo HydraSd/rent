@@ -117,11 +117,6 @@ class _PreviewScreenState extends State<PreviewScreen> {
           )
         ],
       ),
-      // floatingActionButton: FloatingActionButton(
-      //   onPressed: () => makeCalls(widget.phoneNumber),
-      //   tooltip: "call",
-      //   child: const Icon(Icons.phone),
-      // ),
       body: CustomScrollView(slivers: [
         SliverToBoxAdapter(
           child: _ImageSlider(images: widget.images),
@@ -266,7 +261,6 @@ class _Content extends StatelessWidget {
               padding: const EdgeInsets.only(bottom: 18.0),
               child: Prices(
                 price: price,
-                weekendPrice: weekendPrice,
               )),
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 10),

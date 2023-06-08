@@ -68,9 +68,10 @@ dependencies:
   native_notify: ^0.0.3
   flutter_local_notifications: ^14.0.0
   modal_bottom_sheet: ^2.1.2
-  
+  syncfusion_flutter_sliders: ^21.2.4
 
- 
+
+
 
 dev_dependencies:
 
@@ -113,6 +114,7 @@ flutter:
     - assets/images/pyramid.png
     - assets/images/tent.png
     - assets/images/car.png
+    - assets/images/logo/redmix.png
 
     
 

@@ -11,10 +11,9 @@ class Catagories extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        elevation: 0,
         iconTheme: Theme.of(context).iconTheme,
-        // elevation: 0,
-        // backgroundColor: Colors.transparent,
-        backgroundColor: Theme.of(context).cardColor,
+        backgroundColor: Colors.transparent,
         centerTitle: true,
         title: Text(catagory),
         titleTextStyle: Theme.of(context).textTheme.headline6,
@@ -56,7 +55,6 @@ class Catagories extends StatelessWidget {
                                     catagory: product["category"],
                                     description: product["description"],
                                     price: product['price'],
-                                    weekEndPrice: product['weekendPrice'],
                                     location: product['location'],
                                     userID: product['userId'],
                                     phoneNumber: product['phoneNumber'],

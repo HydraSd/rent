@@ -4,9 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
-import 'package:rent/models/product.dart';
+import 'package:rent/models/product_distance.dart';
 import 'package:rent/screens/screens.dart';
 import 'package:http/http.dart' as http;
+import 'package:syncfusion_flutter_sliders/sliders.dart';
 
 class SearchScreen extends StatefulWidget {
   final String header;
@@ -23,32 +24,33 @@ class _SearchScreenState extends State<SearchScreen> {
   LocationData? currentLocation;
   LatLng? destination;
 
-  // void getCurrentLocation() async {
-  //   Location location = Location();
-  //   await location.getLocation().then((value) {
-  //     setState(() {
-  //       currentLocation = value;
-  //     });
-  //   });
-  // }
-
-  Future<List<String>> fetchData(String userSearch) async {
-    final response =
-        await http.get(Uri.parse("http://192.168.1.6:5000/$userSearch"));
-    if (response.statusCode == 200) {
-      List<dynamic> data = jsonDecode(response.body);
-      List<String> list = data.cast<String>().toList();
-      return list;
-    } else {
-      throw Exception("Failed to load");
-    }
+  void getCurrentLocation() async {
+    Location location = Location();
+    await location.getLocation().then((value) {
+      setState(() {
+        currentLocation = value;
+      });
+    });
   }
+
+  // Future<List<String>> fetchData(String userSearch) async {
+  //   final response =
+  //       await http.get(Uri.parse("http://192.168.43.94:5000/$userSearch"));
+  //   if (response.statusCode == 200) {
+  //     List<dynamic> data = jsonDecode(response.body);
+  //     List<String> list = data.cast<String>().toList();
+  //     return list;
+  //   } else {
+  //     throw Exception("Failed to load");
+  //   }
+  // }
 
   @override
   void initState() {
-    // getCurrentLocation();
+    getCurrentLocation();
     super.initState();
-    _search();
+
+    // _search();
   }
 
   double calculateDistance(LatLng start, LatLng end) {
@@ -73,44 +75,114 @@ class _SearchScreenState extends State<SearchScreen> {
     return degrees * pi / 180;
   }
 
-  Future<void> _search() async {
-    List<String> searchResults = await fetchData(widget.header);
-    setState(() {
-      _searchResults = searchResults;
-    });
-  }
+  // Future<void> _search() async {
+  //   List<String> searchResults = await fetchData(widget.header);
+  //   setState(() {
+  //     _searchResults = searchResults;
+  //   });
+  // }
+
+  bool filter = false;
+  SfRangeValues _values = const SfRangeValues(1000.0, 10000.0);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         iconTheme: Theme.of(context).iconTheme,
-        elevation: 0,
-        backgroundColor: Colors.transparent,
+        // elevation: 0,
+        backgroundColor: Theme.of(context).cardColor,
         centerTitle: true,
         title: Text(widget.header),
         titleTextStyle: Theme.of(context).textTheme.headline6,
+        actions: [
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 10.0),
+            child: GestureDetector(
+                onTap: () {
+                  setState(() {
+                    filter = !filter;
+                  });
+                },
+                child: const Icon(Icons.filter_list_outlined)),
+          )
+        ],
+        bottom: filter
+            ? PreferredSize(
+                preferredSize: const Size(double.maxFinite, 200),
+                child: Padding(
+                  padding: const EdgeInsets.all(10.0),
+                  child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text(
+                          "Filter Data",
+                          style: TextStyle(
+                              fontSize: 20, fontWeight: FontWeight.bold),
+                        ),
+                        const SizedBox(height: 15),
+                        Text(
+                            "Price: ${_values.start.round()} - ${_values.end.round()}"),
+                        SfRangeSlider(
+                          min: 0,
+                          max: 100000,
+                          interval: 500,
+                          enableTooltip: true,
+                          values: _values,
+                          minorTicksPerInterval: 1,
+                          onChanged: (SfRangeValues values) {
+                            setState(() {
+                              _values = values;
+                            });
+                          },
+                        )
+                      ]),
+                ),
+              )
+            : null,
       ),
       body: StreamBuilder<QuerySnapshot>(
-        stream: FirebaseFirestore.instance
-            .collection("test")
-            .where('productName',
-                whereIn:
-                    _searchResults?.isNotEmpty == true ? _searchResults : [""])
-            // .where('productName',
-            //     whereIn: _searchResults?.isNotEmpty == true
-            //         ? _searchResults
-            //         : [""])
-            .snapshots(),
+        stream: FirebaseFirestore.instance.collection("test").snapshots(),
         builder: (context, snapshot) {
           if (!snapshot.hasData) {
             return const Center(child: CircularProgressIndicator());
           }
 
+          final searchQuery = widget.search.toLowerCase();
+          final searchResults = snapshot.data!.docs.where((doc) {
+            final productName = doc['productName'].toString().toLowerCase();
+            return productName.contains(searchQuery);
+          }).toList();
+
+          LatLng? currentLatLng;
+          if (currentLocation != null) {
+            currentLatLng = LatLng(
+              currentLocation!.latitude!,
+              currentLocation!.longitude!,
+            );
+          }
+          List<ProductDistance> products = [];
+
+          for (DocumentSnapshot product in searchResults) {
+            double distance = 0;
+
+            if (currentLocation != null &&
+                product['lat'] != null &&
+                product['long'] != null) {
+              LatLng productLatLng = LatLng(product['lat'], product['long']);
+              distance = calculateDistance(currentLatLng!, productLatLng);
+            }
+
+            products.add(ProductDistance(product, distance));
+          }
+
+          products.sort((a, b) => a.distance.compareTo(b.distance));
+
           return ListView.builder(
-              itemCount: snapshot.data!.docs.length,
+              itemCount: products.length,
               itemBuilder: (context, index) {
-                DocumentSnapshot product = snapshot.data!.docs[index];
+                DocumentSnapshot product = products[index].product;
 
                 return ListTile(
                   leading: Container(
@@ -128,7 +200,7 @@ class _SearchScreenState extends State<SearchScreen> {
                           product['lat'] != null &&
                           product['long'] != null
                       ? Text(
-                          "${calculateDistance(LatLng(currentLocation!.latitude!, currentLocation!.longitude!), LatLng(product['lat'], product['long'])).toStringAsFixed(2)} km",
+                          "${calculateDistance(currentLatLng!, LatLng(product['lat'], product['long'])).toStringAsFixed(2)} km",
                           style: const TextStyle(color: Colors.blue),
                         )
                       : null,
@@ -142,7 +214,6 @@ class _SearchScreenState extends State<SearchScreen> {
                             catagory: product["category"],
                             description: product["description"],
                             price: product['price'],
-                            weekEndPrice: product['weekendPrice'],
                             location: product['location'],
                             userID: product['userId'],
                             phoneNumber: product['phoneNumber'],

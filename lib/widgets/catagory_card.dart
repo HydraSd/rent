@@ -12,7 +12,7 @@ class CatagoryBox extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 8.0),
       child: Material(
-        elevation: 10,
+        elevation: 5,
         borderRadius: BorderRadius.circular(10),
         child: Container(
           // height: 100,

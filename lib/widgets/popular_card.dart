@@ -2,11 +2,13 @@ import 'package:flutter/material.dart';
 
 // ignore: must_be_immutable
 class MostPopular extends StatelessWidget {
+  String distance;
   String productName;
   String imgURL;
   MostPopular(
       {Key? key,
       this.productName = '',
+      this.distance = '',
       this.imgURL =
           'https://th.bing.com/th/id/OIP.HxV79tFMPfBAIo0BBF-sOgHaEy?pid=ImgDet&rs=1'})
       : super(key: key);
@@ -18,7 +20,7 @@ class MostPopular extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Material(
-        elevation: 10,
+        elevation: 5,
         borderRadius: BorderRadius.circular(10),
         child: Container(
           decoration: BoxDecoration(
@@ -55,27 +57,24 @@ class MostPopular extends StatelessWidget {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Expanded(
-                                child: Text(
-                                  productName,
-                                  style: const TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.w700),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      productName,
+                                      style: const TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.w700),
+                                    ),
+                                    // Text(
+                                    //   distance,
+                                    //   style:
+                                    //       const TextStyle(color: Colors.blue),
+                                    // ),
+                                  ],
                                 ),
                               ),
                               const SizedBox(width: 20),
-                              (rented)
-                                  ? const Text(
-                                      "available",
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.w700,
-                                          color: Colors.green),
-                                    )
-                                  : const Text(
-                                      "rented",
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.w700,
-                                          color: Colors.redAccent),
-                                    )
                             ],
                           ),
                           Row(

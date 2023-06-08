@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bounceable/flutter_bounceable.dart';
 import 'package:rent/screens/screens.dart';
 
-class DeleteUpdate extends StatelessWidget {
-  const DeleteUpdate({
+class UpdateProduct extends StatelessWidget {
+  const UpdateProduct({
     Key? key,
     required this.documentId,
     required this.productName,

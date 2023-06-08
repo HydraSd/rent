@@ -20,7 +20,7 @@ class RequestBtn extends StatelessWidget {
                 borderRadius: BorderRadius.circular(10), color: Colors.blue),
             child: const Center(
                 child: Text(
-              "Request Product",
+              "Save Product",
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             )),
           ),

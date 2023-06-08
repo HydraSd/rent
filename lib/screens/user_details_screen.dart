@@ -12,16 +12,14 @@ class UserDetailsScreen extends StatefulWidget {
   final String productName;
   final int requests;
   final String documentId;
-  final String startDate;
-  final String endDate;
-  const UserDetailsScreen(
-      {super.key,
-      required this.userId,
-      required this.productName,
-      required this.requests,
-      required this.documentId,
-      required this.startDate,
-      required this.endDate});
+
+  const UserDetailsScreen({
+    super.key,
+    required this.userId,
+    required this.productName,
+    required this.requests,
+    required this.documentId,
+  });
 
   @override
   State<UserDetailsScreen> createState() => _UserDetailsScreenState();
@@ -38,11 +36,12 @@ class _UserDetailsScreenState extends State<UserDetailsScreen> {
   Future<void> requestProduct() async {
     final doc = FirebaseFirestore.instance.collection('request').doc();
     final request = Request(
-        userId: widget.userId,
-        contactNumber: phoneNumber!,
-        idNumber: idNumberController.text,
-        userName: "${user.displayName}",
-        productName: widget.productName);
+      userId: widget.userId,
+      contactNumber: phoneNumber!,
+      idNumber: idNumberController.text,
+      userName: "${user.displayName}",
+      productName: widget.productName,
+    );
     final json = request.toJson();
     await doc.set(json);
   }
@@ -127,9 +126,7 @@ class _UserDetailsScreenState extends State<UserDetailsScreen> {
             ],
           ),
         ),
-        Text(widget.startDate),
         const SizedBox(height: 30),
-        // MainButton(func: requestProduct())
         SizedBox(
           width: 150,
           child: Bounceable(

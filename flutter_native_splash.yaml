@@ -2,7 +2,7 @@ dependencies:
   flutter_native_splash: ^2.2.19
 
 flutter_native_splash:
-  image: "assets/images/logo2.png"
+  image: "assets/images/logo/redmix.png"
   color: "#000000"
   # image-dark: "assets/images/logo2.png"
   # color-dark: "#000000"

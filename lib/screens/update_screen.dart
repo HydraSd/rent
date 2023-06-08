@@ -205,7 +205,7 @@ class _UpdateScreenState extends State<UpdateScreen> {
                   updateDocument(nameController.text, priceController.text,
                       desController.text, _selectedItem!);
                   Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => const YourProducts()));
+                      builder: (context) => const HomeScreen()));
                 },
                 child: const Text("Confirm"))
           ],

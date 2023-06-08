@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:rent/productScreen/popular_screen.dart';
 
 class HeaderTitles extends StatelessWidget {
   final String title;
@@ -19,7 +20,14 @@ class HeaderTitles extends StatelessWidget {
             ),
           ),
         ),
-        const Icon(Icons.arrow_forward)
+        GestureDetector(
+            // onTap: () {
+            //   Navigator.of(context).push(MaterialPageRoute(
+            //       builder: (context) => const PopularRecommended(
+            //             appBarTitle: "Most popular products",
+            //           )));
+            // },
+            child: const Icon(Icons.arrow_forward))
       ],
     );
   }

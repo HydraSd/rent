@@ -23,8 +23,8 @@ class _LoginScreenState extends State<LoginScreen> {
             decoration: BoxDecoration(
                 image: DecorationImage(
                     image: (brightness == Brightness.light)
-                        ? const AssetImage("assets/images/logo.png")
-                        : const AssetImage("assets/images/logo2.png"),
+                        ? const AssetImage("assets/images/logo/redmix.png")
+                        : const AssetImage("assets/images/logo/redmix.png"),
                     fit: BoxFit.cover)),
           ),
           const SizedBox(height: 50),

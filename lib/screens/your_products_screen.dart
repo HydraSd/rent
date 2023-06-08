@@ -62,7 +62,7 @@ class _YourProductsState extends State<YourProducts> {
                               catagory: product["category"],
                               description: product["description"],
                               price: product['price'],
-                              weekEndPrice: product['weekendPrice'],
+                              // weekEndPrice: product['weekendPrice'],
                               location: product['location'],
                               userID: product['userId'],
                               phoneNumber: product['phoneNumber'],

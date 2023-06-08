@@ -268,7 +268,7 @@ class _RentScreenState extends State<RentScreen> {
           backgroundColor: Colors.transparent,
           elevation: 0,
           title: Text(
-            "Rent your product",
+            "Sell your product",
             style: TextStyle(
                 color: brightness == Brightness.light
                     ? Colors.black
@@ -348,7 +348,6 @@ class _RentScreenState extends State<RentScreen> {
                             setState(() {
                               phoneNumber = "${number.phoneNumber}";
                             });
-                            print(phoneNumber);
                           },
                           inputBorder: InputBorder.none,
                           selectorConfig: const SelectorConfig(
@@ -414,7 +413,7 @@ class _RentScreenState extends State<RentScreen> {
                           borderRadius: BorderRadius.circular(10)),
                       child: const Center(
                           child: Text(
-                        "Rent",
+                        "Sell",
                         style: TextStyle(
                             fontSize: 20, fontWeight: FontWeight.bold),
                       )),
@@ -447,7 +446,7 @@ class _RentScreenState extends State<RentScreen> {
               keyboardType: TextInputType.number,
               decoration: const InputDecoration(
                   border: InputBorder.none,
-                  hintText: "Enter the price per a day"),
+                  hintText: "Enter the product value"),
             ),
           ),
           Visibility(
@@ -477,43 +476,43 @@ class _RentScreenState extends State<RentScreen> {
                       weekends = val;
                     });
                   }),
-              const Text("Do you have special price for week ends")
+              const Text("Negotiable")
             ],
           ),
-          Visibility(
-            visible: weekends,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Container(
-                  padding: const EdgeInsets.only(left: 10),
-                  height: 50,
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(5),
-                      color: Theme.of(context).cardColor),
-                  child: TextFormField(
-                    controller: weekController,
-                    keyboardType: TextInputType.number,
-                    decoration: const InputDecoration(
-                        border: InputBorder.none,
-                        hintText: "Enter the price per a day(Week end days)"),
-                  ),
-                ),
-                Visibility(
-                  visible: weekendError,
-                  child: const Padding(
-                    padding: EdgeInsets.only(left: 8, top: 5),
-                    child: Text(
-                      "Please enter a valid amount",
-                      style: TextStyle(
-                        color: Colors.redAccent,
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          )
+          // Visibility(
+          //   visible: weekends,
+          //   child: Column(
+          //     crossAxisAlignment: CrossAxisAlignment.start,
+          //     children: [
+          //       Container(
+          //         padding: const EdgeInsets.only(left: 10),
+          //         height: 50,
+          //         decoration: BoxDecoration(
+          //             borderRadius: BorderRadius.circular(5),
+          //             color: Theme.of(context).cardColor),
+          //         child: TextFormField(
+          //           controller: weekController,
+          //           keyboardType: TextInputType.number,
+          //           decoration: const InputDecoration(
+          //               border: InputBorder.none,
+          //               hintText: "Enter the price per a day(Week end days)"),
+          //         ),
+          //       ),
+          //       Visibility(
+          //         visible: weekendError,
+          //         child: const Padding(
+          //           padding: EdgeInsets.only(left: 8, top: 5),
+          //           child: Text(
+          //             "Please enter a valid amount",
+          //             style: TextStyle(
+          //               color: Colors.redAccent,
+          //             ),
+          //           ),
+          //         ),
+          //       ),
+          //     ],
+          //   ),
+          // )
         ],
       ),
     );
