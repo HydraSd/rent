@@ -19,11 +19,11 @@ void main() async {
       ),
     );
   };
-  // WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
-  WidgetsFlutterBinding.ensureInitialized();
-  // NativeNotify.initialize(2883, 'Jx2CSbGZcFtbDfRIia6jvG');
-  await Firebase.initializeApp();
 
+  WidgetsFlutterBinding.ensureInitialized();
+
+  await Firebase.initializeApp();
+  WidgetsFlutterBinding.ensureInitialized();
   runApp(const MyApp());
 }
 
@@ -67,9 +67,7 @@ class _MyAppState extends State<MyApp> {
     });
   }
 
-  void _handleMessage(RemoteMessage message) {
-    print("received message: ${message.notification?.title}");
-  }
+  void _handleMessage(RemoteMessage message) {}
 
   @override
   Widget build(BuildContext context) {

@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:rent/screens/notification_screen.dart';
+import 'package:http/http.dart';
 import 'package:rent/screens/productScreen/saved_screen.dart';
 import 'package:rent/screens/registerScreen/register_screen.dart';
 import 'package:rent/screens/registerScreen/storeScreen.dart';
@@ -21,6 +20,7 @@ class _SideBarState extends State<SideBar> {
   String? imgUrl;
   String? phoneNumber;
   String? description;
+  String? documentId;
 
   @override
   void initState() {
@@ -28,14 +28,25 @@ class _SideBarState extends State<SideBar> {
     getProfile();
   }
 
-  Future<QuerySnapshot<Object?>>? getProfile() async {
-    QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+  Future<DocumentSnapshot<Object?>?> getProfile() async {
+    QuerySnapshot<Object?> querySnapshot = await FirebaseFirestore.instance
         .collection('userProfile')
         .where('userId', isEqualTo: widget.userId)
+        .limit(1)
         .get();
 
-    if (querySnapshot != null) {
-      for (QueryDocumentSnapshot documentSnapshot in querySnapshot.docs) {
+    DocumentSnapshot<Object?>? documentSnapshot;
+
+    // DocumentSnapshot? documentSnapshot = await FirebaseFirestore.instance
+    //     .collection('userProfile')
+    //     .where('userId', isEqualTo: widget.userId)
+    //     .limit(1)
+    //     .get()
+    //     .then((querySnapshot) => querySnapshot.docs.first);
+
+    if (querySnapshot.docs.isNotEmpty) {
+      DocumentSnapshot<Object?> documentSnapshot = querySnapshot.docs.first;
+      if (documentSnapshot != null) {
         Map<String, dynamic>? data =
             documentSnapshot.data() as Map<String, dynamic>?;
         setState(() {
@@ -43,11 +54,13 @@ class _SideBarState extends State<SideBar> {
           imgUrl = data["logoUrl"];
           description = data["description"];
           phoneNumber = data["phoneNumber"];
+          documentId = documentSnapshot.id;
         });
       }
+
+      return documentSnapshot;
     }
-    // print(businessName);
-    return querySnapshot;
+    return null;
   }
 
   @override
@@ -98,6 +111,7 @@ class _SideBarState extends State<SideBar> {
                       name: businessName!,
                       description: description!,
                       phoneNumber: phoneNumber!,
+                      documentId: documentId!,
                     ))),
             child: const ListTile(
               leading: Icon(Icons.store),
@@ -129,31 +143,6 @@ class _SideBarState extends State<SideBar> {
             title: Text(
               "Saved products",
               style: TextStyle(fontSize: 16),
-            ),
-          ),
-        ),
-        GestureDetector(
-          onTap: () => Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) => const NotificationScreen())),
-          child: ListTile(
-            leading: const Icon(Icons.notifications),
-            title: const Text(
-              "Notification",
-              style: TextStyle(fontSize: 16),
-            ),
-            trailing: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 12.0),
-              child: Container(
-                alignment: Alignment.center,
-                height: 20,
-                width: 20,
-                decoration: const BoxDecoration(
-                    shape: BoxShape.circle, color: Colors.blue),
-                child: const Text(
-                  "1",
-                  style: TextStyle(fontWeight: FontWeight.bold),
-                ),
-              ),
             ),
           ),
         ),

@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'dart:math' show sin, cos, sqrt, atan2, pi;
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -6,7 +5,6 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
 import 'package:rent/models/product_distance.dart';
 import 'package:rent/screens/screens.dart';
-import 'package:http/http.dart' as http;
 import 'package:syncfusion_flutter_sliders/sliders.dart';
 
 class SearchScreen extends StatefulWidget {
@@ -20,7 +18,7 @@ class SearchScreen extends StatefulWidget {
 
 class _SearchScreenState extends State<SearchScreen> {
   // String _searchQuery = '';
-  List<String>? _searchResults;
+
   LocationData? currentLocation;
   LatLng? destination;
 
@@ -33,24 +31,10 @@ class _SearchScreenState extends State<SearchScreen> {
     });
   }
 
-  // Future<List<String>> fetchData(String userSearch) async {
-  //   final response =
-  //       await http.get(Uri.parse("http://192.168.43.94:5000/$userSearch"));
-  //   if (response.statusCode == 200) {
-  //     List<dynamic> data = jsonDecode(response.body);
-  //     List<String> list = data.cast<String>().toList();
-  //     return list;
-  //   } else {
-  //     throw Exception("Failed to load");
-  //   }
-  // }
-
   @override
   void initState() {
     getCurrentLocation();
     super.initState();
-
-    // _search();
   }
 
   double calculateDistance(LatLng start, LatLng end) {
@@ -74,13 +58,6 @@ class _SearchScreenState extends State<SearchScreen> {
   double _toRadians(double degrees) {
     return degrees * pi / 180;
   }
-
-  // Future<void> _search() async {
-  //   List<String> searchResults = await fetchData(widget.header);
-  //   setState(() {
-  //     _searchResults = searchResults;
-  //   });
-  // }
 
   bool filter = false;
   SfRangeValues _values = const SfRangeValues(1000.0, 10000.0);
@@ -195,7 +172,11 @@ class _SearchScreenState extends State<SearchScreen> {
                             image: NetworkImage("${product['imgUrl'][0]}"))),
                   ),
                   title: Text(product["productName"]),
-                  subtitle: Text(product["category"]),
+                  subtitle: Text(
+                    product["location"],
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                  ),
                   trailing: currentLocation != null &&
                           product['lat'] != null &&
                           product['long'] != null

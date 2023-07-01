@@ -66,7 +66,11 @@ class PopularProductScreen extends StatelessWidget {
                             image: NetworkImage("${data['imgUrl'][0]}"))),
                   ),
                   title: Text(data['productName']),
-                  subtitle: Text(data['category']),
+                  subtitle: Text(
+                    data['location'],
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                  ),
                 ),
               );
             }).toList(),

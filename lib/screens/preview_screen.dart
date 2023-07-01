@@ -15,7 +15,7 @@ class PreviewScreen extends StatefulWidget {
   final String productName;
   final String description;
   final String catagory;
-  final String price;
+  final double price;
   final String weekendPrice;
   final double lat;
   final double long;
@@ -69,7 +69,6 @@ class _PreviewScreenState extends State<PreviewScreen> {
         catagory: widget.catagory,
         description: widget.description,
         price: widget.price,
-        weekendPrice: widget.weekendPrice,
         userID: _getuserId(),
         lat: widget.lat,
         long: widget.long,
@@ -97,7 +96,6 @@ class _PreviewScreenState extends State<PreviewScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final brightness = Theme.of(context).brightness;
     return Scaffold(
       appBar: AppBar(
         iconTheme: Theme.of(context).iconTheme,
@@ -232,7 +230,7 @@ class _Content extends StatelessWidget {
   final String productName;
   final String description;
   final String catagory;
-  final String price;
+  final double price;
   final String weekendPrice;
   final double lat;
   final double long;

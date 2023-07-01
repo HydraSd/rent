@@ -28,7 +28,7 @@ class _HomeScreenState extends State<HomeScreen> {
       },
       child: Scaffold(
           drawer: SideBar(
-            userId: "${user.uid}",
+            userId: user.uid,
             name: "${user.displayName}",
           ),
           appBar: AppBar(

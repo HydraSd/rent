@@ -4,8 +4,8 @@ class Product {
   final String catagory;
   final List imgUrl;
   final String description;
-  final String price;
-  final String weekendPrice;
+  final double price;
+
   final String userID;
   final double lat;
   final double long;
@@ -16,7 +16,6 @@ class Product {
   Product(
       {this.id = '',
       required this.price,
-      required this.weekendPrice,
       required this.imgUrl,
       required this.productName,
       required this.description,
@@ -35,7 +34,6 @@ class Product {
         'category': catagory,
         'description': description,
         'price': price,
-        'weekendPrice': weekendPrice,
         'userId': userID,
         'location': location,
         'lat': lat,

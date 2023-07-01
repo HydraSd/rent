@@ -1,9 +1,7 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:rent/screens/home_screen.dart';
 import 'package:rent/screens/login_screen.dart';
-import 'package:rent/screens/user_details_screen.dart';
 
 class Loged extends StatelessWidget {
   const Loged({super.key});

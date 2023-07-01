@@ -48,6 +48,16 @@ class MostPopularWidState extends State<MostPopularWid> {
     });
   }
 
+  double convertPrice(dynamic price) {
+    if (price is int) {
+      return price.toDouble();
+    } else if (price is double) {
+      return price;
+    } else {
+      return 0.0; // Return a default value if the price is not a valid number.
+    }
+  }
+
   double calculateDistance(LatLng start, LatLng end) {
     const double radius = 6371; // Earth's radius in kilometers
     double lat1 = start.latitude;
@@ -120,13 +130,14 @@ class MostPopularWidState extends State<MostPopularWid> {
                               productName: product["productName"],
                               catagory: product["category"],
                               description: product["description"],
-                              price: product['price'],
+                              price: convertPrice(product['price']),
                               location: product['location'],
                               userID: product['userId'],
                               phoneNumber: product['phoneNumber'],
                               request: product['requests'],
                             ))),
                     child: MostPopular(
+                      description: product['description'],
                       // distance:
                       //     "${calculateDistance(LatLng(currentLocation!.latitude!, currentLocation!.longitude!), LatLng(product['lat'], product['long'])).toStringAsFixed(2)} km",
                       productName: product["productName"],

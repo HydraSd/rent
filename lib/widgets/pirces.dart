@@ -1,9 +1,10 @@
 // ignore_for_file: unnecessary_null_comparison
 
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class Prices extends StatelessWidget {
-  final String price;
+  final double price;
 
   Prices({
     super.key,
@@ -12,6 +13,10 @@ class Prices extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    String formattedPrice = NumberFormat.currency(
+      symbol: 'Rs.',
+      decimalDigits: 2,
+    ).format(price);
     return Row(
       children: [
         Expanded(
@@ -33,7 +38,7 @@ class Prices extends StatelessWidget {
                   child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 8),
                 child: Text(
-                  "Rs. $price",
+                  formattedPrice,
                   style: const TextStyle(fontSize: 20),
                 ),
               ))

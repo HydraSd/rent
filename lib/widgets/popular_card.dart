@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 
 // ignore: must_be_immutable
 class MostPopular extends StatelessWidget {
-  String distance;
+  String description;
   String productName;
   String imgURL;
   MostPopular(
       {Key? key,
       this.productName = '',
-      this.distance = '',
+      this.description = '',
       this.imgURL =
           'https://th.bing.com/th/id/OIP.HxV79tFMPfBAIo0BBF-sOgHaEy?pid=ImgDet&rs=1'})
       : super(key: key);
@@ -77,15 +77,21 @@ class MostPopular extends StatelessWidget {
                               const SizedBox(width: 20),
                             ],
                           ),
-                          Row(
-                            children: const [
-                              Icon(Icons.star, color: Colors.yellow, size: 18),
-                              Icon(Icons.star, color: Colors.yellow, size: 18),
-                              Icon(Icons.star, color: Colors.yellow, size: 18),
-                              Icon(Icons.star, color: Colors.yellow, size: 18),
-                              Icon(Icons.star, color: Colors.yellow, size: 18),
-                            ],
-                          )
+                          Expanded(
+                              child: Text(
+                            description,
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                          ))
+                          // Row(
+                          //   children: const [
+                          //     Icon(Icons.star, color: Colors.yellow, size: 18),
+                          //     Icon(Icons.star, color: Colors.yellow, size: 18),
+                          //     Icon(Icons.star, color: Colors.yellow, size: 18),
+                          //     Icon(Icons.star, color: Colors.yellow, size: 18),
+                          //     Icon(Icons.star, color: Colors.yellow, size: 18),
+                          //   ],
+                          // )
                         ],
                       ),
                     ),

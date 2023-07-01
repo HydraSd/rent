@@ -13,7 +13,7 @@ class UpdateProduct extends StatelessWidget {
 
   final String documentId;
   final String productName;
-  final String price;
+  final double price;
   final String description;
 
   @override

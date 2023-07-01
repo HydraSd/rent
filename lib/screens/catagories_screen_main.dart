@@ -72,7 +72,11 @@ class Catagories extends StatelessWidget {
                                       NetworkImage("${product['imgUrl'][0]}"))),
                         ),
                         title: Text(product['productName']),
-                        subtitle: Text(product['category']),
+                        subtitle: Text(
+                          product['location'],
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                        ),
                       ),
                     );
                   },

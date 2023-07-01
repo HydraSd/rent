@@ -23,8 +23,8 @@ class _LoginScreenState extends State<LoginScreen> {
             decoration: BoxDecoration(
                 image: DecorationImage(
                     image: (brightness == Brightness.light)
-                        ? const AssetImage("assets/images/logo/redmix.png")
-                        : const AssetImage("assets/images/logo/redmix.png"),
+                        ? const AssetImage("assets/images/logo2/black_logo.png")
+                        : const AssetImage("assets/images/logo2/logo.png"),
                     fit: BoxFit.cover)),
           ),
           const SizedBox(height: 50),
@@ -74,26 +74,30 @@ class _LoginButton extends StatelessWidget {
         decoration: BoxDecoration(
             color: Theme.of(context).cardColor,
             borderRadius: BorderRadius.circular(10)),
-        child: Expanded(
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Container(
-                height: 40,
-                width: 40,
-                decoration: const BoxDecoration(
-                    image: DecorationImage(
-                        image: AssetImage('assets/images/google.png'))),
+        child: Column(
+          children: [
+            Expanded(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Container(
+                    height: 40,
+                    width: 40,
+                    decoration: const BoxDecoration(
+                        image: DecorationImage(
+                            image: AssetImage('assets/images/google.png'))),
+                  ),
+                  const Padding(
+                    padding: EdgeInsets.all(8.0),
+                    child: Text(
+                      "Log in",
+                      style: TextStyle(fontSize: 20),
+                    ),
+                  )
+                ],
               ),
-              const Padding(
-                padding: EdgeInsets.all(8.0),
-                child: Text(
-                  "Log in",
-                  style: TextStyle(fontSize: 20),
-                ),
-              )
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

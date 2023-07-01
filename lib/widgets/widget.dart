@@ -11,7 +11,6 @@ export 'detail_content.dart';
 export 'image_scroller.dart';
 export 'text.dart';
 export 'text_widget.dart';
-export 'account_btn.dart';
 export 'calendar.dart';
 export 'update_btn.dart';
 export 'requestBtn.dart';

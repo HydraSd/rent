@@ -65,7 +65,7 @@ dependencies:
   url_launcher: ^6.1.10
   intl_phone_number_input: ^0.7.2
   firebase_messaging: ^14.4.1
-  native_notify: ^0.0.3
+ 
   flutter_local_notifications: ^14.0.0
   modal_bottom_sheet: ^2.1.2
   syncfusion_flutter_sliders: ^21.2.4
@@ -100,9 +100,6 @@ flutter:
   assets:
     - assets/images/google.png
     - assets/map_style.json
-    - assets/images/logo.png
-    - assets/images/logo2.png
-    - assets/images/foreground.png
     - assets/images/electronic.png
     - assets/images/home-appliance.png
     - assets/images/furnitures.png
@@ -115,6 +112,8 @@ flutter:
     - assets/images/tent.png
     - assets/images/car.png
     - assets/images/logo/redmix.png
+    - assets/images/logo2/logo.png
+    - assets/images/logo2/black_logo.png
 
     
 

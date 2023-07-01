@@ -95,9 +95,7 @@ class _UserDetailsScreenState extends State<UserDetailsScreen> {
               ignoreBlank: false,
               keyboardType: const TextInputType.numberWithOptions(
                   signed: true, decimal: true),
-              onSaved: (PhoneNumber number) {
-                print('On Saved: $number');
-              },
+              onSaved: (PhoneNumber number) {},
             ),
           ),
         ),

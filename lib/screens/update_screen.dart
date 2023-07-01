@@ -8,7 +8,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 class UpdateScreen extends StatefulWidget {
   final String productName;
-  final String price;
+  final double price;
   final String description;
   final String documentId;
   const UpdateScreen(
@@ -24,7 +24,17 @@ class UpdateScreen extends StatefulWidget {
 
 class _UpdateScreenState extends State<UpdateScreen> {
   String? _selectedItem;
-  final List<String> _catagories = ["Electric", "Clothes", "Cata1", "Cata3"];
+  final List<String> _catagories = [
+    "Electronics",
+    "Home Appliances",
+    "Furniture",
+    "Party and Event",
+    "Tools and Equipment",
+    "Clothing and Accessories",
+    "Toys and Games",
+    "Toys and Games",
+    "Vehicles"
+  ];
   final FocusNode focusNode = FocusNode();
   final FocusNode desFocus = FocusNode();
   final FocusNode priceFocus = FocusNode();
@@ -47,7 +57,7 @@ class _UpdateScreenState extends State<UpdateScreen> {
   void initState() {
     super.initState();
     nameController.text = widget.productName;
-    priceController.text = widget.price;
+    priceController.text = widget.price as String;
     desController.text = widget.description;
   }
 
@@ -120,11 +130,11 @@ class _UpdateScreenState extends State<UpdateScreen> {
       await documentReference.update({
         'productName': productName,
         'description': description,
-        'catagory': catagory,
+        'category': catagory,
         'price': price
       });
     } catch (e) {
-      print('Error updating document: $e');
+      null;
     }
   }
 

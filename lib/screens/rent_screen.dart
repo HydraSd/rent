@@ -59,7 +59,7 @@ class _RentScreenState extends State<RentScreen> {
     final Map<String, dynamic>? result = await Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => MapScreen(),
+        builder: (context) => const MapScreen(),
       ),
     );
 
@@ -168,7 +168,7 @@ class _RentScreenState extends State<RentScreen> {
                 images: images,
                 productName: nameController.text,
                 description: desController.text,
-                price: priceController.text,
+                price: double.parse(priceController.text),
                 weekendPrice: weekController.text,
                 lat: lat!,
                 long: long!,
@@ -206,7 +206,6 @@ class _RentScreenState extends State<RentScreen> {
       }
       weekEndPrice();
       if (images.isEmpty) {
-        print(images);
         setState(() {
           imgError = true;
         });

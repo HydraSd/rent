@@ -14,12 +14,6 @@ class YourProducts extends StatefulWidget {
 class _YourProductsState extends State<YourProducts> {
   User? user = FirebaseAuth.instance.currentUser;
 
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   print(user?.uid);
-  // }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(

@@ -6,6 +6,24 @@ class SavedProductsScreen extends StatelessWidget {
   String userId;
   SavedProductsScreen({super.key, required this.userId});
 
+  Future<List<DocumentSnapshot>> _fetchProductDetails(
+      List<String> productIds) async {
+    final List<DocumentSnapshot> productDetails = [];
+
+    for (final productId in productIds) {
+      final snapshot = await FirebaseFirestore.instance
+          .collection("test")
+          .doc(productId)
+          .get();
+
+      if (snapshot.exists) {
+        productDetails.add(snapshot);
+      }
+    }
+
+    return productDetails;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -31,9 +49,117 @@ class SavedProductsScreen extends StatelessWidget {
                 itemCount: products.length,
                 itemBuilder: (context, index) {
                   final product = products[index];
-                  return ListTile(
-                    title: Text("${product["userId"]}"),
-                  );
+                  final productIds = List<String>.from(product["products"]);
+
+                  return FutureBuilder<List<DocumentSnapshot>>(
+                      future: _fetchProductDetails(productIds),
+                      builder: (context, snapshot) {
+                        if (!snapshot.hasData) {
+                          return const Center(
+                            child: CircularProgressIndicator(),
+                          );
+                        }
+                        final productDetails = snapshot.data!;
+
+                        return SizedBox(
+                          height: MediaQuery.of(context).size.height,
+                          child: ListView.builder(
+                              itemCount: productDetails.length,
+                              itemBuilder: (context, index) {
+                                final documentSnapshot = productDetails[index];
+
+                                return GestureDetector(
+                                  onTap: () => Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => DetailsScreen(
+                                                documentId: documentSnapshot.id,
+                                                lat: documentSnapshot['lat'],
+                                                long: documentSnapshot['long'],
+                                                imgurls:
+                                                    documentSnapshot["imgUrl"],
+                                                productName: documentSnapshot[
+                                                    "productName"],
+                                                catagory: documentSnapshot[
+                                                    "category"],
+                                                description: documentSnapshot[
+                                                    "description"],
+                                                price:
+                                                    documentSnapshot['price'],
+                                                // weekEndPrice: product['weekendPrice'],
+                                                location: documentSnapshot[
+                                                    'location'],
+                                                userID:
+                                                    documentSnapshot['userId'],
+                                                phoneNumber: documentSnapshot[
+                                                    'phoneNumber'],
+                                                request: documentSnapshot[
+                                                    'requests'],
+                                              ))),
+                                  child: ListTile(
+                                    leading: Container(
+                                      height: 50,
+                                      width: 50,
+                                      decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                          image: DecorationImage(
+                                              fit: BoxFit.cover,
+                                              image: NetworkImage(
+                                                  "${documentSnapshot['imgUrl'][0]}"))),
+                                    ),
+                                    title: Text(
+                                        '${documentSnapshot['productName']}'),
+                                    subtitle:
+                                        Text(documentSnapshot['location']),
+                                  ),
+                                );
+                              }),
+                        );
+                        // if (documentSnapshot == null) {
+                        //   return const ListTile(
+                        //     title: Text('Product details not found'),
+                        //   );
+                        // }
+
+                        // return GestureDetector(
+                        //   onTap: () => Navigator.push(
+                        //       context,
+                        //       MaterialPageRoute(
+                        //           builder: (context) => DetailsScreen(
+                        //                 documentId: documentSnapshot.id,
+                        //                 lat: documentSnapshot['lat'],
+                        //                 long: documentSnapshot['long'],
+                        //                 imgurls: documentSnapshot["imgUrl"],
+                        //                 productName:
+                        //                     documentSnapshot["productName"],
+                        //                 catagory: documentSnapshot["category"],
+                        //                 description:
+                        //                     documentSnapshot["description"],
+                        //                 price: documentSnapshot['price'],
+                        //                 // weekEndPrice: product['weekendPrice'],
+                        //                 location: documentSnapshot['location'],
+                        //                 userID: documentSnapshot['userId'],
+                        //                 phoneNumber:
+                        //                     documentSnapshot['phoneNumber'],
+                        //                 request: documentSnapshot['requests'],
+                        //               ))),
+                        //   child: ListTile(
+                        //     leading: Container(
+                        //       height: 50,
+                        //       width: 50,
+                        //       decoration: BoxDecoration(
+                        //           borderRadius: BorderRadius.circular(10),
+                        //           image: DecorationImage(
+                        //               fit: BoxFit.cover,
+                        //               image: NetworkImage(
+                        //                   "${documentSnapshot['imgUrl'][0]}"))),
+                        //     ),
+                        //     title: Text(documentSnapshot['productName']),
+                        //     subtitle: Text(documentSnapshot['category']),
+                        //   ),
+                        // );
+                      });
                 });
           },
         ));

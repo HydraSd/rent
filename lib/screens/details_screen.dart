@@ -2,11 +2,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bounceable/flutter_bounceable.dart';
-import 'package:rent/models/saved.dart';
 import 'package:rent/screens/registerScreen/business_profile.dart';
 import 'package:rent/screens/screens.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:rent/screens/user_details_screen.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:rent/widgets/widget.dart';
 
@@ -16,7 +14,7 @@ class DetailsScreen extends StatefulWidget {
   final String productName;
   final String catagory;
   final String description;
-  final String price;
+  final double price;
   final String location;
   final double lat;
   final double long;
@@ -59,14 +57,23 @@ class _DetailsScreenState extends State<DetailsScreen> {
   void addProductToUserDocument(String userId, String newProductId) {
     FirebaseFirestore.instance
         .collection('userDetails')
-        .where('userId', isEqualTo: widget.userID)
+        .where('userId', isEqualTo: userId)
         .limit(1)
         .get()
         .then((querySnapshot) {
       if (querySnapshot.size > 0) {
         String documentId = querySnapshot.docs[0].id;
         List<dynamic> productList = querySnapshot.docs[0].get('products');
-        productList.add(newProductId);
+        // productList.add(newProductId);
+        if (productList.contains(newProductId)) {
+          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+            content: Text("Product already saved"),
+            backgroundColor: Colors.orange,
+          ));
+          return null;
+        } else {
+          productList.add(newProductId);
+        }
 
         // Update the user document with the updated product list
         FirebaseFirestore.instance
@@ -131,7 +138,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
         });
       }
     }
-    // print(businessName);
+
     return querySnapshot;
   }
 
@@ -197,7 +204,6 @@ class _DetailsScreenState extends State<DetailsScreen> {
     }
 
     void makeCalls(String phoneNumber) async {
-      String telUrl = 'tel:0705980290';
       if (await canLaunchUrl(Uri.parse("tel:$phoneNumber"))) {
         await launchUrl(Uri.parse("tel:$phoneNumber"));
       } else {
@@ -456,7 +462,9 @@ class _DetailsScreenState extends State<DetailsScreen> {
                       onTap: () {
                         addProductToUserDocument(user!.uid, widget.documentId);
                       },
-                      child: const RequestBtn(),
+                      child: const RequestBtn(
+                        btnText: "Save Product",
+                      ),
                     ),
             ),
           )

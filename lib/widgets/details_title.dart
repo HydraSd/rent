@@ -5,7 +5,7 @@ class Title1 extends StatelessWidget {
   final String productName;
   final String catagory;
   final String description;
-  final String price;
+  final double price;
 
   final double lat;
   final double long;
