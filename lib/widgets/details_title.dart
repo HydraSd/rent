@@ -31,30 +31,7 @@ class Title1 extends StatelessWidget {
             productName,
             style: const TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
           ),
-          Row(
-            children: const [
-              Icon(
-                Icons.star,
-                color: Colors.yellow,
-                size: 20,
-              ),
-              Icon(
-                Icons.star,
-                color: Colors.yellow,
-                size: 20,
-              ),
-              Icon(
-                Icons.star,
-                color: Colors.yellow,
-                size: 20,
-              ),
-              Icon(
-                Icons.star,
-                color: Colors.yellow,
-                size: 20,
-              ),
-            ],
-          ),
+          
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 8),
             child: Text("Catagory product belongs: $catagory",
