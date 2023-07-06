@@ -1,10 +1,13 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:rent/func/google_sign_in.dart';
 import '../screens/screens.dart';
 import 'package:rent/widgets/widget.dart';
 import 'package:rent/MainCatagories/most_popular_wid.dart';
+import 'package:flutter_image_slideshow/flutter_image_slideshow.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -72,7 +75,8 @@ class _HomeScreenState extends State<HomeScreen> {
                     decoration: InputDecoration(
                         suffixIcon: GestureDetector(
                           onTap: () {
-                            if (_searchController.text != "") {
+                            if (_searchController.text != null &&
+                                _searchController.text.isNotEmpty) {
                               Navigator.of(context).push(MaterialPageRoute(
                                   builder: (context) => SearchScreen(
                                         header: _searchController.text,
@@ -101,24 +105,39 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
           ),
-          // body: _Catagories(),
           body: const _UnfocusMode()),
     );
   }
 }
 
 class _UnfocusMode extends StatelessWidget {
-  const _UnfocusMode({
-    Key? key,
-  }) : super(key: key);
+  const _UnfocusMode({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return CustomScrollView(
       slivers: [
+        SliverToBoxAdapter(
+          child: ImageSlideshow(
+            height: 200,
+            width: double.infinity,
+            indicatorColor: Colors.blue,
+            autoPlayInterval: 3000,
+            isLoop: true,
+            children: [
+              Image.asset(
+                "assets/images/banners/banner1.png",
+                fit: BoxFit.fill,
+              ),
+              Image.asset(
+                "assets/images/banners/banner2.png",
+                fit: BoxFit.fill,
+              ),
+            ],
+          ),
+        ),
         SliverToBoxAdapter(child: CatagoriesWid()),
         const SliverToBoxAdapter(child: MostPopularWid()),
-        const SliverToBoxAdapter(child: _Recommended()),
       ],
     );
   }
@@ -160,27 +179,5 @@ class _SignOutButton extends StatelessWidget {
               );
             }),
         child: Avatar(image: "${user.photoURL}"));
-  }
-}
-
-class _Recommended extends StatelessWidget {
-  const _Recommended();
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        const HeaderTitles(title: "Recommended"),
-        SizedBox(
-          height: 250,
-          child: ListView(scrollDirection: Axis.horizontal, children: [
-            MostPopular(),
-            MostPopular(),
-            MostPopular(),
-            MostPopular(),
-          ]),
-        ),
-      ],
-    );
   }
 }

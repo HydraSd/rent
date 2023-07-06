@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bounceable/flutter_bounceable.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
@@ -41,6 +42,21 @@ class _UpdateBusinessProfileState extends State<UpdateBusinessProfile> {
 
   bool isLoading = false;
 
+  void imageSet() {
+    setState(() {
+      images = controller.images.map((e) => File(e.path!)).toList();
+    });
+  }
+
+  Future<void> deleteFile(String url) async {
+    try {
+      final Reference ref = FirebaseStorage.instance.refFromURL(url);
+      await ref.delete();
+    } catch (e) {
+      rethrow;
+    }
+  }
+
   Future<void> updateDocument(
       String businessName, String description, String? phoneNumber) async {
     setState(() {
@@ -51,11 +67,27 @@ class _UpdateBusinessProfileState extends State<UpdateBusinessProfile> {
     final DocumentReference documentReference =
         collectionReference.doc(widget.documentId);
     try {
-      await documentReference.update({
-        'businessName': businessName,
-        'description': description,
-        'phoneNumber': phoneNumber,
-      });
+      if (images.isEmpty) {
+        await documentReference.update({
+          'businessName': businessName,
+          'description': description,
+          'phoneNumber': phoneNumber,
+        });
+      }
+      if (images.isNotEmpty) {
+        File image = images[0];
+        String imageName = '${DateTime.now().microsecondsSinceEpoch}.jpg';
+        Reference ref = FirebaseStorage.instance.ref().child(imageName);
+        await ref.putFile(image);
+        String imgUrl = await ref.getDownloadURL();
+        deleteFile(widget.imgUrl);
+        await documentReference.update({
+          "logoUrl": imgUrl,
+          'businessName': businessName,
+          'description': description,
+          'phoneNumber': phoneNumber,
+        });
+      }
       setState(() {
         isLoading = false;
       });
@@ -71,6 +103,7 @@ class _UpdateBusinessProfileState extends State<UpdateBusinessProfile> {
     }
 
     if (!nameError && !desError) {
+      imageSet();
       updateDocument(businessName, description, phoneNumber!);
 
       Navigator.of(context)

@@ -94,6 +94,16 @@ class _StoreScreenState extends State<StoreScreen> {
           });
     }
 
+    double convertPrice(dynamic price) {
+      if (price is int) {
+        return price.toDouble();
+      } else if (price is double) {
+        return price;
+      } else {
+        return 0.0; // Return a default value if the price is not a valid number.
+      }
+    }
+
     return Scaffold(
       appBar: AppBar(
           iconTheme: Theme.of(context).iconTheme,
@@ -201,7 +211,7 @@ class _StoreScreenState extends State<StoreScreen> {
                                         productName: product["productName"],
                                         catagory: product["category"],
                                         description: product["description"],
-                                        price: product['price'],
+                                        price: convertPrice(product['price']),
                                         location: product['location'],
                                         userID: product['userId'],
                                         phoneNumber: product['phoneNumber'],

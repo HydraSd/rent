@@ -9,6 +9,16 @@ class Catagories extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    double convertPrice(dynamic price) {
+      if (price is int) {
+        return price.toDouble();
+      } else if (price is double) {
+        return price;
+      } else {
+        return 0.0; // Return a default value if the price is not a valid number.
+      }
+    }
+
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
@@ -24,6 +34,8 @@ class Catagories extends StatelessWidget {
             padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16),
             child: Text(
               des,
+              overflow: TextOverflow.ellipsis,
+              maxLines: 4,
               style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
             ),
           ),
@@ -54,7 +66,7 @@ class Catagories extends StatelessWidget {
                                     productName: product["productName"],
                                     catagory: product["category"],
                                     description: product["description"],
-                                    price: product['price'],
+                                    price: convertPrice(product['price']),
                                     location: product['location'],
                                     userID: product['userId'],
                                     phoneNumber: product['phoneNumber'],

@@ -29,14 +29,21 @@ class _RentScreenState extends State<RentScreen> {
   String? _selectedItem;
   final List<String> _catagories = [
     "Electronics",
+    "Vehicles",
     "Home Appliances",
     "Furniture",
-    "Party and Event",
-    "Tools and Equipment",
-    "Clothing and Accessories",
-    "Toys and Games",
-    "Toys and Games",
-    "Vehicles"
+    "Clothing & Accessories",
+    "Food",
+    "Stationery",
+    "Ceramic",
+    "Home & Decor",
+    "Jewellery",
+    "Tableware",
+    "Party & Event",
+    "Tools & Equipment",
+    "Toys & Games",
+    "Sports & Fitness",
+    "Camping & Outdoors"
   ];
   List<File> images = [];
   bool priceError = false;
@@ -460,58 +467,6 @@ class _RentScreenState extends State<RentScreen> {
               ),
             ),
           ),
-          Row(
-            children: [
-              CustomCheckBox(
-                  shouldShowBorder: true,
-                  borderColor: Colors.blue,
-                  checkedFillColor: Colors.blue,
-                  borderRadius: 5,
-                  borderWidth: 1,
-                  checkBoxSize: 18,
-                  value: weekends,
-                  onChanged: (val) {
-                    setState(() {
-                      weekends = val;
-                    });
-                  }),
-              const Text("Negotiable")
-            ],
-          ),
-          // Visibility(
-          //   visible: weekends,
-          //   child: Column(
-          //     crossAxisAlignment: CrossAxisAlignment.start,
-          //     children: [
-          //       Container(
-          //         padding: const EdgeInsets.only(left: 10),
-          //         height: 50,
-          //         decoration: BoxDecoration(
-          //             borderRadius: BorderRadius.circular(5),
-          //             color: Theme.of(context).cardColor),
-          //         child: TextFormField(
-          //           controller: weekController,
-          //           keyboardType: TextInputType.number,
-          //           decoration: const InputDecoration(
-          //               border: InputBorder.none,
-          //               hintText: "Enter the price per a day(Week end days)"),
-          //         ),
-          //       ),
-          //       Visibility(
-          //         visible: weekendError,
-          //         child: const Padding(
-          //           padding: EdgeInsets.only(left: 8, top: 5),
-          //           child: Text(
-          //             "Please enter a valid amount",
-          //             style: TextStyle(
-          //               color: Colors.redAccent,
-          //             ),
-          //           ),
-          //         ),
-          //       ),
-          //     ],
-          //   ),
-          // )
         ],
       ),
     );

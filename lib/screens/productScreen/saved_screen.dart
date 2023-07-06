@@ -26,6 +26,16 @@ class SavedProductsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    double convertPrice(dynamic price) {
+      if (price is int) {
+        return price.toDouble();
+      } else if (price is double) {
+        return price;
+      } else {
+        return 0.0; // Return a default value if the price is not a valid number.
+      }
+    }
+
     return Scaffold(
         appBar: AppBar(
           iconTheme: Theme.of(context).iconTheme,
@@ -84,8 +94,8 @@ class SavedProductsScreen extends StatelessWidget {
                                                     "category"],
                                                 description: documentSnapshot[
                                                     "description"],
-                                                price:
-                                                    documentSnapshot['price'],
+                                                price: convertPrice(
+                                                    documentSnapshot['price']),
                                                 // weekEndPrice: product['weekendPrice'],
                                                 location: documentSnapshot[
                                                     'location'],
@@ -116,49 +126,6 @@ class SavedProductsScreen extends StatelessWidget {
                                 );
                               }),
                         );
-                        // if (documentSnapshot == null) {
-                        //   return const ListTile(
-                        //     title: Text('Product details not found'),
-                        //   );
-                        // }
-
-                        // return GestureDetector(
-                        //   onTap: () => Navigator.push(
-                        //       context,
-                        //       MaterialPageRoute(
-                        //           builder: (context) => DetailsScreen(
-                        //                 documentId: documentSnapshot.id,
-                        //                 lat: documentSnapshot['lat'],
-                        //                 long: documentSnapshot['long'],
-                        //                 imgurls: documentSnapshot["imgUrl"],
-                        //                 productName:
-                        //                     documentSnapshot["productName"],
-                        //                 catagory: documentSnapshot["category"],
-                        //                 description:
-                        //                     documentSnapshot["description"],
-                        //                 price: documentSnapshot['price'],
-                        //                 // weekEndPrice: product['weekendPrice'],
-                        //                 location: documentSnapshot['location'],
-                        //                 userID: documentSnapshot['userId'],
-                        //                 phoneNumber:
-                        //                     documentSnapshot['phoneNumber'],
-                        //                 request: documentSnapshot['requests'],
-                        //               ))),
-                        //   child: ListTile(
-                        //     leading: Container(
-                        //       height: 50,
-                        //       width: 50,
-                        //       decoration: BoxDecoration(
-                        //           borderRadius: BorderRadius.circular(10),
-                        //           image: DecorationImage(
-                        //               fit: BoxFit.cover,
-                        //               image: NetworkImage(
-                        //                   "${documentSnapshot['imgUrl'][0]}"))),
-                        //     ),
-                        //     title: Text(documentSnapshot['productName']),
-                        //     subtitle: Text(documentSnapshot['category']),
-                        //   ),
-                        // );
                       });
                 });
           },

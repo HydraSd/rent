@@ -14,21 +14,6 @@ class Loged extends StatelessWidget {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Center(child: CircularProgressIndicator());
         } else if (snapshot.hasData) {
-          // User? user = FirebaseAuth.instance.currentUser;
-          // final doc =
-          //     FirebaseFirestore.instance.collection('user').doc(user!.uid);
-
-          // return FutureBuilder<DocumentSnapshot>(
-          //     future: doc.get(),
-          //     builder: (context, snapshot) {
-          //       if (snapshot.connectionState == ConnectionState.waiting) {
-          //         return const Center(child: CircularProgressIndicator());
-          //       } else if (!snapshot.hasData || !snapshot.data!.exists) {
-          //         return UserDetailsScreen();
-          //       } else {
-          //         return HomeScreen();
-          //       }
-          //     });
           return const HomeScreen();
         } else if (snapshot.hasError) {
           return const Center(child: Text("Something went wrong"));

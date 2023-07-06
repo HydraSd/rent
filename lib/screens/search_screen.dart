@@ -5,7 +5,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
 import 'package:rent/models/product_distance.dart';
 import 'package:rent/screens/screens.dart';
-import 'package:syncfusion_flutter_sliders/sliders.dart';
+import 'package:extended_masked_text/extended_masked_text.dart';
 
 class SearchScreen extends StatefulWidget {
   final String header;
@@ -60,7 +60,38 @@ class _SearchScreenState extends State<SearchScreen> {
   }
 
   bool filter = false;
-  SfRangeValues _values = const SfRangeValues(1000.0, 10000.0);
+
+  double convertPrice(dynamic price) {
+    if (price is int) {
+      return price.toDouble();
+    } else if (price is double) {
+      return price;
+    } else {
+      return 0.0; // Return a default value if the price is not a valid number.
+    }
+  }
+
+  var startPrice = MoneyMaskedTextController(
+    decimalSeparator: '.', // Set the decimal separator character
+    thousandSeparator: ',', // Set the thousand separator character
+    leftSymbol: '\Rs', // Set the currency symbol or any other desired symbol
+  );
+
+  var endPrice = MoneyMaskedTextController(
+    decimalSeparator: '.', // Set the decimal separator character
+    thousandSeparator: ',', // Set the thousand separator character
+    leftSymbol: '\Rs', // Set the currency symbol or any other desired symbol
+  );
+  @override
+  void dispose() {
+    startPrice.dispose();
+    endPrice.dispose();
+    super.dispose();
+  }
+
+  void updateUI() {
+    setState(() {});
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -86,7 +117,7 @@ class _SearchScreenState extends State<SearchScreen> {
         ],
         bottom: filter
             ? PreferredSize(
-                preferredSize: const Size(double.maxFinite, 200),
+                preferredSize: const Size(double.maxFinite, 150),
                 child: Padding(
                   padding: const EdgeInsets.all(10.0),
                   child: Column(
@@ -99,20 +130,34 @@ class _SearchScreenState extends State<SearchScreen> {
                               fontSize: 20, fontWeight: FontWeight.bold),
                         ),
                         const SizedBox(height: 15),
-                        Text(
-                            "Price: ${_values.start.round()} - ${_values.end.round()}"),
-                        SfRangeSlider(
-                          min: 0,
-                          max: 100000,
-                          interval: 500,
-                          enableTooltip: true,
-                          values: _values,
-                          minorTicksPerInterval: 1,
-                          onChanged: (SfRangeValues values) {
-                            setState(() {
-                              _values = values;
-                            });
-                          },
+                        Text("Price: ${startPrice.text} - ${endPrice.text}"),
+                        Row(
+                          children: [
+                            Expanded(
+                                child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: TextField(
+                                controller: startPrice,
+                                keyboardType: TextInputType.number,
+                                decoration: const InputDecoration(
+                                  hintText: "Starting price",
+                                  prefixIcon: Icon(Icons.attach_money),
+                                ),
+                              ),
+                            )),
+                            Expanded(
+                                child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: TextField(
+                                controller: endPrice,
+                                keyboardType: TextInputType.number,
+                                decoration: const InputDecoration(
+                                  hintText: "Ending price",
+                                  prefixIcon: Icon(Icons.attach_money),
+                                ),
+                              ),
+                            ))
+                          ],
                         )
                       ]),
                 ),
@@ -129,7 +174,19 @@ class _SearchScreenState extends State<SearchScreen> {
           final searchQuery = widget.search.toLowerCase();
           final searchResults = snapshot.data!.docs.where((doc) {
             final productName = doc['productName'].toString().toLowerCase();
-            return productName.contains(searchQuery);
+            final productPrice = doc['price'] ?? 0.0;
+            startPrice.addListener(updateUI);
+            endPrice.addListener(updateUI);
+
+            double amount = startPrice.numberValue;
+            double amount2 = (endPrice.numberValue == 0)
+                ? double.infinity
+                : endPrice.numberValue;
+            print(amount2);
+            return productName.contains(searchQuery) &&
+                productPrice >= amount &&
+                productPrice <= amount2;
+            // return productName.contains(searchQuery);
           }).toList();
 
           LatLng? currentLatLng;
@@ -194,7 +251,7 @@ class _SearchScreenState extends State<SearchScreen> {
                             productName: product["productName"],
                             catagory: product["category"],
                             description: product["description"],
-                            price: product['price'],
+                            price: convertPrice(product['price']),
                             location: product['location'],
                             userID: product['userId'],
                             phoneNumber: product['phoneNumber'],

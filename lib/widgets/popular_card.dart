@@ -83,15 +83,6 @@ class MostPopular extends StatelessWidget {
                             maxLines: 2,
                             overflow: TextOverflow.ellipsis,
                           ))
-                          // Row(
-                          //   children: const [
-                          //     Icon(Icons.star, color: Colors.yellow, size: 18),
-                          //     Icon(Icons.star, color: Colors.yellow, size: 18),
-                          //     Icon(Icons.star, color: Colors.yellow, size: 18),
-                          //     Icon(Icons.star, color: Colors.yellow, size: 18),
-                          //     Icon(Icons.star, color: Colors.yellow, size: 18),
-                          //   ],
-                          // )
                         ],
                       ),
                     ),

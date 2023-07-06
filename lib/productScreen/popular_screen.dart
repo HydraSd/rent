@@ -7,6 +7,16 @@ class PopularProductScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    double convertPrice(dynamic price) {
+      if (price is int) {
+        return price.toDouble();
+      } else if (price is double) {
+        return price;
+      } else {
+        return 0.0; // Return a default value if the price is not a valid number.
+      }
+    }
+
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
@@ -48,7 +58,7 @@ class PopularProductScreen extends StatelessWidget {
                             productName: data["productName"],
                             catagory: data["category"],
                             description: data["description"],
-                            price: data['price'],
+                            price: convertPrice(data['price']),
                             location: data['location'],
                             userID: data['userId'],
                             phoneNumber: data['phoneNumber'],

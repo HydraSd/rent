@@ -53,6 +53,30 @@ class _DetailsScreenState extends State<DetailsScreen> {
   String? imgUrl;
   String? description;
   String? phoneNumber;
+  String? userId;
+
+  final FirebaseFirestore firestore = FirebaseFirestore.instance;
+
+  void updateRequest() async {
+    DocumentReference documentReference =
+        firestore.collection('test').doc(widget.documentId);
+
+    firestore.runTransaction((transaction) async {
+      DocumentSnapshot snapshot = await transaction.get(documentReference);
+      if (snapshot.exists && snapshot.data() != null) {
+        Map<String, dynamic> data =
+            snapshot.data() as Map<String, dynamic>; // Cast the data to a Map
+        int currentRequest =
+            data['requests'] as int; // Access 'request' field using []
+        int updatedRequest = currentRequest + 1;
+        transaction.update(documentReference, {'requests': updatedRequest});
+      }
+    }).then((value) {
+      print('Request updated successfully!');
+    }).catchError((error) {
+      print('Failed to update request: $error');
+    });
+  }
 
   void addProductToUserDocument(String userId, String newProductId) {
     FirebaseFirestore.instance
@@ -76,6 +100,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
         }
 
         // Update the user document with the updated product list
+        updateRequest();
         FirebaseFirestore.instance
             .collection('userDetails')
             .doc(documentId)
@@ -135,6 +160,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
           imgUrl = data["logoUrl"];
           description = data["description"];
           phoneNumber = data["phoneNumber"];
+          userId = data['userId'];
         });
       }
     }
@@ -391,7 +417,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                           onTap: () => Navigator.of(context).push(
                               MaterialPageRoute(
                                   builder: (context) => BusinessProfile(
-                                      userId: '',
+                                      userId: userId!,
                                       name: businessName!,
                                       imgUrl: imgUrl,
                                       description: description!,

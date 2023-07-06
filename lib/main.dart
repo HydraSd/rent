@@ -1,6 +1,5 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
-// import 'package:native_notify/native_notify.dart';
 import 'package:provider/provider.dart';
 import 'package:rent/func/google_sign_in.dart';
 import 'package:rent/screens/no_internet.dart';
@@ -8,13 +7,11 @@ import 'package:rent/screens/screens.dart';
 import 'package:rent/theme.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:connectivity/connectivity.dart';
-// import 'package:flutter_native_splash/flutter_native_splash.dart';
 
 void main() async {
   ErrorWidget.builder = (FlutterErrorDetails details) {
     return const Material(
       child: Scaffold(
-        backgroundColor: Colors.white,
         body: Center(child: Text("Error occured")),
       ),
     );

@@ -26,14 +26,21 @@ class _UpdateScreenState extends State<UpdateScreen> {
   String? _selectedItem;
   final List<String> _catagories = [
     "Electronics",
+    "Vehicles",
     "Home Appliances",
     "Furniture",
-    "Party and Event",
-    "Tools and Equipment",
-    "Clothing and Accessories",
-    "Toys and Games",
-    "Toys and Games",
-    "Vehicles"
+    "Clothing & Accessories",
+    "Food",
+    "Stationery",
+    "Ceramic",
+    "Home & Decor",
+    "Jewellery",
+    "Tableware",
+    "Party & Event",
+    "Tools & Equipment",
+    "Toys & Games",
+    "Sports & Fitness",
+    "Camping & Outdoors"
   ];
   final FocusNode focusNode = FocusNode();
   final FocusNode desFocus = FocusNode();
@@ -57,7 +64,7 @@ class _UpdateScreenState extends State<UpdateScreen> {
   void initState() {
     super.initState();
     nameController.text = widget.productName;
-    priceController.text = widget.price as String;
+    priceController.text = widget.price.toString();
     desController.text = widget.description;
   }
 
@@ -131,7 +138,7 @@ class _UpdateScreenState extends State<UpdateScreen> {
         'productName': productName,
         'description': description,
         'category': catagory,
-        'price': price
+        'price': double.parse(price)
       });
     } catch (e) {
       null;
