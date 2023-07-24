@@ -7,7 +7,6 @@ import 'package:rent/screens/map_screen.dart';
 import 'package:rent/screens/preview_screen.dart';
 import 'package:rent/widgets/widget.dart';
 
-import 'package:intl/intl.dart';
 
 class RentScreen extends StatefulWidget {
   const RentScreen({super.key});
