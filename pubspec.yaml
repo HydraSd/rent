@@ -71,6 +71,7 @@ dependencies:
   syncfusion_flutter_sliders: ^21.2.4
   flutter_image_slideshow: ^0.1.5
   extended_masked_text: ^2.3.1
+  
 
 
 

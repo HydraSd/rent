@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'package:custom_check_box/custom_check_box.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bounceable/flutter_bounceable.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
@@ -7,6 +6,8 @@ import 'package:multi_image_picker_view/multi_image_picker_view.dart';
 import 'package:rent/screens/map_screen.dart';
 import 'package:rent/screens/preview_screen.dart';
 import 'package:rent/widgets/widget.dart';
+
+import 'package:intl/intl.dart';
 
 class RentScreen extends StatefulWidget {
   const RentScreen({super.key});
@@ -260,6 +261,8 @@ class _RentScreenState extends State<RentScreen> {
     }
     return phoneNumberError;
   }
+
+  String? userCountry;
 
   @override
   Widget build(BuildContext context) {

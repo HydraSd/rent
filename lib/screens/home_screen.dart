@@ -1,13 +1,14 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart';
 import 'package:provider/provider.dart';
 import 'package:rent/func/google_sign_in.dart';
 import '../screens/screens.dart';
 import 'package:rent/widgets/widget.dart';
 import 'package:rent/MainCatagories/most_popular_wid.dart';
 import 'package:flutter_image_slideshow/flutter_image_slideshow.dart';
+// import 'package:geolocator/geolocator.dart';
+// import 'package:geocoding/geocoding.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -20,6 +21,37 @@ class _HomeScreenState extends State<HomeScreen> {
   final user = FirebaseAuth.instance.currentUser!;
   final FocusNode _focusNode = FocusNode();
   final TextEditingController _searchController = TextEditingController();
+
+  @override
+  // void initState() {
+  //   super.initState();
+
+  //   print("Country : ${getUserCountry()}");
+  // }
+
+  // Future<String?> getUserCountry() async {
+  //   try {
+  //     // Get the current position (latitude and longitude)
+  //     Position position = await Geolocator.getCurrentPosition(
+  //       desiredAccuracy: LocationAccuracy.high,
+  //     );
+
+  //     // Retrieve the country name based on the coordinates
+  //     List<Placemark> placemarks = await placemarkFromCoordinates(
+  //       position.latitude,
+  //       position.longitude,
+  //     );
+
+  //     // Extract the country name from the placemark
+  //     String? country = placemarks.first.country;
+
+  //     return country;
+  //   } catch (e) {
+  //     // Handle any errors that occur during the process
+  //     print('Error: $e');
+  //     return null;
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {

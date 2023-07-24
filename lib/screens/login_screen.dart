@@ -32,7 +32,7 @@ class _LoginScreenState extends State<LoginScreen> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: const [
               Text(
-                "Welcome to RentMate",
+                "Welcome to RedMix",
                 style: TextStyle(fontSize: 30),
               ),
             ],
