@@ -20,7 +20,7 @@ abstract class AppTheme {
   static final visualDensity = VisualDensity.adaptivePlatformDensity;
   static ThemeData light() => ThemeData(
       brightness: Brightness.light,
-      accentColor: accentColor,
+      // accentColor: accentColor,
       visualDensity: visualDensity,
       backgroundColor: _LightColors.background,
       scaffoldBackgroundColor: _LightColors.background,
@@ -31,7 +31,7 @@ abstract class AppTheme {
 
   static ThemeData dark() => ThemeData(
       brightness: Brightness.dark,
-      accentColor: accentColor,
+      // accentColor: accentColor,
       visualDensity: visualDensity,
       backgroundColor: _DarkColors.background,
       scaffoldBackgroundColor: _DarkColors.background,
